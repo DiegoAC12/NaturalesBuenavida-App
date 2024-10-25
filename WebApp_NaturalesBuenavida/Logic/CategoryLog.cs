@@ -1,101 +1,40 @@
-﻿using System;
 using System.Data;
-using Data; // Referencia a la capa de datos
+using Data;
 
 namespace Logic
 {
-    public class LogicCategory
+    public class CategoryLog
     {
-        DataCategory objDataCategory = new DataCategory();
+        DataCategory dataCategory = new DataCategory();
 
-        // Método para obtener todas las categorías
+        // L�gica para obtener todas las categor�as
         public DataSet GetCategories()
         {
-            try
-            {
-                return objDataCategory.showCategories();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al obtener categorías: " + ex.Message);
-            }
+            return dataCategory.ShowCategories();
         }
 
-        // Método para guardar una nueva categoría
+        // L�gica para crear una nueva categor�a
         public bool AddCategory(string descripcion)
         {
-            if (string.IsNullOrEmpty(descripcion))
-            {
-                throw new ArgumentException("La descripción no puede estar vacía.");
-            }
-
-            try
-            {
-                return objDataCategory.saveCategory(descripcion);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al agregar categoría: " + ex.Message);
-            }
+            return dataCategory.CreateCategory(descripcion);
         }
 
-        // Método para actualizar una categoría
-        public bool UpdateCategory(int catId, string descripcion)
+        // L�gica para actualizar una categor�a
+        public bool EditCategory(int catId, string descripcion)
         {
-            if (catId <= 0)
-            {
-                throw new ArgumentException("El ID de la categoría no es válido.");
-            }
-
-            if (string.IsNullOrEmpty(descripcion))
-            {
-                throw new ArgumentException("La descripción no puede estar vacía.");
-            }
-
-            try
-            {
-                return objDataCategory.updateCategory(catId, descripcion);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al actualizar categoría: " + ex.Message);
-            }
+            return dataCategory.UpdateCategory(catId, descripcion);
         }
 
-        // Método para eliminar una categoría
-        public bool DeleteCategory(int catId)
+        // L�gica para eliminar una categor�a
+        public bool RemoveCategory(int catId)
         {
-            if (catId <= 0)
-            {
-                throw new ArgumentException("El ID de la categoría no es válido.");
-            }
-
-            try
-            {
-                return objDataCategory.deleteCategory(catId);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al eliminar categoría: " + ex.Message);
-            }
+            return dataCategory.DeleteCategory(catId);
         }
 
-        // Método para obtener productos con su categoría y proveedor
-        public DataSet GetProductsWithCategoryAndSupplier()
+        // L�gica para obtener las categor�as en formato DDL
+        public DataSet GetCategoriesDDL()
         {
-            try
-            {
-                return objDataCategory.getProductsWithCategoryAndSupplier();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al obtener productos con categorías y proveedores: " + ex.Message);
-            }
+            return dataCategory.ShowCategoriesDDL();
         }
     }
 }

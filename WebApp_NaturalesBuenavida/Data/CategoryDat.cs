@@ -1,22 +1,22 @@
-ï»¿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 
 namespace Data
 {
-    public class DataCategory
+    public class CategoryDat
     {
         Persistence objPer = new Persistence();
 
-        // MÃ©todo para mostrar todas las categorÃ­as
-        public DataSet showCategories()
+        // Método para mostrar todas las categorías
+        public DataSet ShowCategories()
         {
             MySqlDataAdapter objAdapter = new MySqlDataAdapter();
             DataSet objData = new DataSet();
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_read_categoria";
+            objSelectCmd.CommandText = "spGetCategory"; // Procedimiento almacenado para mostrar categorías
             objSelectCmd.CommandType = CommandType.StoredProcedure;
             objAdapter.SelectCommand = objSelectCmd;
             objAdapter.Fill(objData);
@@ -24,100 +24,91 @@ namespace Data
             return objData;
         }
 
-        // MÃ©todo para guardar una nueva categorÃ­a
-        public bool saveCategory(string _Descripcion)
+        // Método para crear una nueva categoría
+        public bool CreateCategory(string descripcion)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_create_categoria";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.VarChar).Value = _Descripcion;
+            MySqlCommand objInsertCmd = new MySqlCommand();
+            objInsertCmd.Connection = objPer.openConnection();
+            objInsertCmd.CommandText = "spCreateCategory"; // Procedimiento almacenado para insertar categoría
+            objInsertCmd.CommandType = CommandType.StoredProcedure;
+            objInsertCmd.Parameters.Add("p_descripcion", MySqlDbType.VarChar, 45).Value = descripcion;
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objInsertCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error" + e.ToString());
+                Console.WriteLine("Error: " + e.ToString());
             }
             objPer.closeConnection();
             return executed;
         }
 
-        // MÃ©todo para actualizar una categorÃ­a
-        public bool updateCategory(int _CatId, string _Descripcion)
+        // Método para actualizar una categoría
+        public bool UpdateCategory(int catId, string descripcion)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_update_categoria";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_cat_id", MySqlDbType.Int32).Value = _CatId;
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.VarChar).Value = _Descripcion;
+            MySqlCommand objUpdateCmd = new MySqlCommand();
+            objUpdateCmd.Connection = objPer.openConnection();
+            objUpdateCmd.CommandText = "spUpdateCategory"; // Procedimiento almacenado para actualizar categoría
+            objUpdateCmd.CommandType = CommandType.StoredProcedure;
+            objUpdateCmd.Parameters.Add("p_cat_id", MySqlDbType.Int32).Value = catId;
+            objUpdateCmd.Parameters.Add("p_descripcion", MySqlDbType.VarChar, 45).Value = descripcion;
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objUpdateCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error" + e.ToString());
+                Console.WriteLine("Error: " + e.ToString());
             }
             objPer.closeConnection();
             return executed;
         }
 
-        // MÃ©todo para eliminar una categorÃ­a
-        public bool deleteCategory(int _CatId)
+        // Método para eliminar una categoría
+        public bool DeleteCategory(int catId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_delete_categoria";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_cat_id", MySqlDbType.Int32).Value = _CatId;
+            MySqlCommand objDeleteCmd = new MySqlCommand();
+            objDeleteCmd.Connection = objPer.openConnection();
+            objDeleteCmd.CommandText = "spDeleteCategory"; // Procedimiento almacenado para eliminar categoría
+            objDeleteCmd.CommandType = CommandType.StoredProcedure;
+            objDeleteCmd.Parameters.Add("p_cat_id", MySqlDbType.Int32).Value = catId;
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objDeleteCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error" + e.ToString());
+                Console.WriteLine("Error: " + e.ToString());
             }
             objPer.closeConnection();
             return executed;
         }
 
-        // MÃ©todo para obtener productos con su categorÃ­a y proveedor
-        public DataSet getProductsWithCategoryAndSupplier()
+        // Método para obtener categorías en formato DDL
+        public DataSet ShowCategoriesDDL()
         {
             MySqlDataAdapter objAdapter = new MySqlDataAdapter();
             DataSet objData = new DataSet();
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_get_productos_with_categoria_and_proveedor";
+            objSelectCmd.CommandText = "spGetCategoryDDL"; // Procedimiento almacenado para DDL de categorías
             objSelectCmd.CommandType = CommandType.StoredProcedure;
             objAdapter.SelectCommand = objSelectCmd;
             objAdapter.Fill(objData);
