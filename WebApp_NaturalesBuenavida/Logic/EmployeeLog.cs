@@ -1,87 +1,40 @@
-﻿using System;
 using System.Data;
-using Data; // Referencia a la capa de datos
+using Data;
 
 namespace Logic
 {
-    public class LogicEmpleado
+    public class EmployeeLog
     {
-        DataEmpleado objDataEmpleado = new DataEmpleado();
+        DataEmployee dataEmployee = new DataEmployee();
 
-        // Método para obtener todos los empleados
-        public DataSet GetEmpleados()
+        // L�gica para obtener todos los empleados
+        public DataSet GetEmployees()
         {
-            try
-            {
-                return objDataEmpleado.showEmpleado();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al obtener empleados: " + ex.Message);
-            }
+            return dataEmployee.ShowEmployees();
         }
 
-        // Método para agregar un nuevo empleado
-        public bool AddEmpleado(int personaId)
+        // L�gica para guardar un nuevo empleado
+        public bool AddEmployee(int personaId)
         {
-            if (personaId <= 0)
-            {
-                throw new ArgumentException("El ID de la persona no es válido.");
-            }
-
-            try
-            {
-                return objDataEmpleado.saveEmpleado(personaId);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al agregar empleado: " + ex.Message);
-            }
+            return dataEmployee.SaveEmployee(personaId);
         }
 
-        // Método para actualizar un empleado
-        public bool UpdateEmpleado(int empId, int personaId)
+        // L�gica para actualizar un empleado
+        public bool EditEmployee(int empId, int personaId)
         {
-            if (empId <= 0)
-            {
-                throw new ArgumentException("El ID del empleado no es válido.");
-            }
-
-            if (personaId <= 0)
-            {
-                throw new ArgumentException("El ID de la persona no es válido.");
-            }
-
-            try
-            {
-                return objDataEmpleado.updateEmpleado(empId, personaId);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al actualizar empleado: " + ex.Message);
-            }
+            return dataEmployee.UpdateEmployee(empId, personaId);
         }
 
-        // Método para eliminar un empleado
-        public bool DeleteEmpleado(int empId)
+        // L�gica para eliminar un empleado
+        public bool RemoveEmployee(int empId)
         {
-            if (empId <= 0)
-            {
-                throw new ArgumentException("El ID del empleado no es válido.");
-            }
+            return dataEmployee.DeleteEmployee(empId);
+        }
 
-            try
-            {
-                return objDataEmpleado.deleteEmpleado(empId);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de lógica de negocio
-                throw new Exception("Error al eliminar empleado: " + ex.Message);
-            }
+        // L�gica para mostrar empleados con DDL
+        public DataSet GetEmployeesDDL()
+        {
+            return dataEmployee.ShowEmployeesDDL();
         }
     }
 }

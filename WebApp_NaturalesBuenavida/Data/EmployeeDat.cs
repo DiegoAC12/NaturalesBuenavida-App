@@ -4,19 +4,19 @@ using System.Data;
 
 namespace Data
 {
-    public class DataEmpleado
+    public class EmployeeDat
     {
         Persistence objPer = new Persistence();
 
         // Método para mostrar todos los empleados
-        public DataSet showEmpleado()
+        public DataSet ShowEmployees()
         {
             MySqlDataAdapter objAdapter = new MySqlDataAdapter();
             DataSet objData = new DataSet();
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_read_empleado";
+            objSelectCmd.CommandText = "spGetEmployee"; // Nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
             objAdapter.SelectCommand = objSelectCmd;
             objAdapter.Fill(objData);
@@ -25,24 +25,21 @@ namespace Data
         }
 
         // Método para guardar un nuevo empleado
-        public bool saveEmpleado(int _PersonaId)
+        public bool SaveEmployee(int personaId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_create_empleado";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_persona_id", MySqlDbType.Int32).Value = _PersonaId;
+            MySqlCommand objInsertCmd = new MySqlCommand();
+            objInsertCmd.Connection = objPer.openConnection();
+            objInsertCmd.CommandText = "spInsertEmployee"; // Nombre del procedimiento almacenado
+            objInsertCmd.CommandType = CommandType.StoredProcedure;
+            objInsertCmd.Parameters.Add("p_fkpersona_id", MySqlDbType.Int32).Value = personaId; // Parámetro
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objInsertCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -53,25 +50,22 @@ namespace Data
         }
 
         // Método para actualizar un empleado
-        public bool updateEmpleado(int _EmpId, int _PersonaId)
+        public bool UpdateEmployee(int empId, int personaId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_update_empleado";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = _EmpId;
-            objSelectCmd.Parameters.Add("p_persona_id", MySqlDbType.Int32).Value = _PersonaId;
+            MySqlCommand objUpdateCmd = new MySqlCommand();
+            objUpdateCmd.Connection = objPer.openConnection();
+            objUpdateCmd.CommandText = "spUpdateEmployee"; // Nombre del procedimiento almacenado
+            objUpdateCmd.CommandType = CommandType.StoredProcedure;
+            objUpdateCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = empId; // Parámetro 1
+            objUpdateCmd.Parameters.Add("p_persona_id", MySqlDbType.Int32).Value = personaId; // Parámetro 2
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objUpdateCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -82,24 +76,21 @@ namespace Data
         }
 
         // Método para eliminar un empleado
-        public bool deleteEmpleado(int _EmpId)
+        public bool DeleteEmployee(int empId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_delete_empleado";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = _EmpId;
+            MySqlCommand objDeleteCmd = new MySqlCommand();
+            objDeleteCmd.Connection = objPer.openConnection();
+            objDeleteCmd.CommandText = "spDeleteEmployee"; // Nombre del procedimiento almacenado
+            objDeleteCmd.CommandType = CommandType.StoredProcedure;
+            objDeleteCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = empId; // Parámetro
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objDeleteCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -107,6 +98,22 @@ namespace Data
             }
             objPer.closeConnection();
             return executed;
+        }
+
+        // Método para mostrar empleados con DDL
+        public DataSet ShowEmployeesDDL()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spGetEmployeeDDL"; // Procedimiento almacenado para DDL
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
         }
     }
 }
