@@ -1,112 +1,88 @@
-ï»¿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 
 namespace Data
 {
-    public class DataSupplier
+    public class SupplierDat
     {
         Persistence objPer = new Persistence();
 
-        // MÃ©todo para mostrar todos los proveedores
-        public DataSet showSuppliers()
+        // Método para insertar un proveedor
+        public void InsertSupplier(int personaId)
         {
-            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
-            DataSet objData = new DataSet();
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = objPer.openConnection();
+            cmd.CommandText = "spInsertSupplier";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_read_proveedor";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objAdapter.SelectCommand = objSelectCmd;
-            objAdapter.Fill(objData);
+            cmd.Parameters.AddWithValue("p_fkpersona_id", personaId);
+
+            cmd.ExecuteNonQuery();
             objPer.closeConnection();
-            return objData;
         }
 
-        // MÃ©todo para guardar un nuevo proveedor
-        public bool saveSupplier(int _PersonaId)
+        // Método para obtener todos los proveedores
+        public DataSet GetSupplier()
         {
-            bool executed = false;
-            int row;
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            DataSet ds = new DataSet();
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_create_proveedor";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_persona_id", MySqlDbType.Int32).Value = _PersonaId;
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = objPer.openConnection();
+            cmd.CommandText = "spGetSupplier";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            try
-            {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e.ToString());
-            }
+            adapter.SelectCommand = cmd;
+            adapter.Fill(ds);
             objPer.closeConnection();
-            return executed;
+            return ds;
         }
 
-        // MÃ©todo para actualizar un proveedor
-        public bool updateSupplier(int _ProvId, int _PersonaId)
+        // Método para actualizar un proveedor
+        public void UpdateSupplier(int provId, int personaId)
         {
-            bool executed = false;
-            int row;
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = objPer.openConnection();
+            cmd.CommandText = "spUpdateSupplier";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_update_proveedor";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_prov_id", MySqlDbType.Int32).Value = _ProvId;
-            objSelectCmd.Parameters.Add("p_persona_id", MySqlDbType.Int32).Value = _PersonaId;
+            cmd.Parameters.AddWithValue("p_pro_id", provId);
+            cmd.Parameters.AddWithValue("p_persona_id", personaId);
 
-            try
-            {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e.ToString());
-            }
+            cmd.ExecuteNonQuery();
             objPer.closeConnection();
-            return executed;
         }
 
-        // MÃ©todo para eliminar un proveedor
-        public bool deleteSupplier(int _ProvId)
+        // Método para eliminar un proveedor
+        public void DeleteSupplier(int provId)
         {
-            bool executed = false;
-            int row;
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = objPer.openConnection();
+            cmd.CommandText = "spDeleteSupplier";
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_delete_proveedor";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_prov_id", MySqlDbType.Int32).Value = _ProvId;
+            cmd.Parameters.AddWithValue("p_pro_id", provId);
 
-            try
-            {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e.ToString());
-            }
+            cmd.ExecuteNonQuery();
             objPer.closeConnection();
-            return executed;
+        }
+
+        // Método para obtener proveedores en formato DDL
+        public DataSet GetSupplierDDL()
+        {
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            DataSet ds = new DataSet();
+
+            MySqlCommand cmd = new MySqlCommand();
+            cmd.Connection = objPer.openConnection();
+            cmd.CommandText = "spGetSupplierDDL";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            adapter.SelectCommand = cmd;
+            adapter.Fill(ds);
+            objPer.closeConnection();
+            return ds;
         }
     }
 }

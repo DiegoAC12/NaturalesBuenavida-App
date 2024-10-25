@@ -1,90 +1,40 @@
-锘縰sing System;
 using System.Data;
-using Data; // Referencia a la capa de datos
+using Data;
 
-namespace Logica
+namespace Logic
 {
-    public class LogicaSupplier
+    public class SupplierLog
     {
-        DataSupplier objDataSupplier = new DataSupplier();
+        DataSupplier dataSupplier = new DataSupplier();
 
-        // M茅todo para obtener todos los proveedores
-        public DataSet GetSuppliers()
+        // L骻ica para insertar un proveedor
+        public void InsertSupplier(int personaId)
         {
-            try
-            {
-                return objDataSupplier.showSuppliers();
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de l贸gica de negocio
-                throw new Exception("Error al obtener proveedores: " + ex.Message);
-            }
+            dataSupplier.InsertSupplier(personaId);
         }
 
-        // M茅todo para agregar un nuevo proveedor
-        public bool AddSupplier(int personaId)
+        // L骻ica para obtener todos los proveedores
+        public DataSet GetSupplier()
         {
-            // Validaci贸n de reglas de negocio
-            if (personaId <= 0)
-            {
-                throw new ArgumentException("El ID de persona no es v谩lido.");
-            }
-
-            try
-            {
-                return objDataSupplier.saveSupplier(personaId);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de l贸gica de negocio
-                throw new Exception("Error al agregar proveedor: " + ex.Message);
-            }
+            return dataSupplier.GetSupplier();
         }
 
-        // M茅todo para actualizar un proveedor
-        public bool UpdateSupplier(int provId, int personaId)
+        // L骻ica para actualizar un proveedor
+        public void UpdateSupplier(int provId, int personaId)
         {
-            // Validaci贸n de reglas de negocio
-            if (provId <= 0)
-            {
-                throw new ArgumentException("El ID de proveedor no es v谩lido.");
-            }
-
-            if (personaId <= 0)
-            {
-                throw new ArgumentException("El ID de persona no es v谩lido.");
-            }
-
-            try
-            {
-                return objDataSupplier.updateSupplier(provId, personaId);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de l贸gica de negocio
-                throw new Exception("Error al actualizar proveedor: " + ex.Message);
-            }
+            dataSupplier.UpdateSupplier(provId, personaId);
         }
 
-        // M茅todo para eliminar un proveedor
-        public bool DeleteSupplier(int provId)
+        // L骻ica para eliminar un proveedor
+        public void DeleteSupplier(int provId)
         {
-            // Validaci贸n de reglas de negocio
-            if (provId <= 0)
-            {
-                throw new ArgumentException("El ID de proveedor no es v谩lido.");
-            }
+            dataSupplier.DeleteSupplier(provId);
+        }
 
-            try
-            {
-                return objDataSupplier.deleteSupplier(provId);
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores a nivel de l贸gica de negocio
-                throw new Exception("Error al eliminar proveedor: " + ex.Message);
-            }
+        // L骻ica para obtener proveedores en formato DDL
+        public DataSet GetSupplierDDL()
+        {
+            return dataSupplier.GetSupplierDDL();
         }
     }
 }
