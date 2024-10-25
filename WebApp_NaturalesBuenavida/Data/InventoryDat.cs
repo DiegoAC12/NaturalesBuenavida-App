@@ -4,19 +4,19 @@ using System.Data;
 
 namespace Data
 {
-    public class DataInventario
+    public class InventoryDat
     {
         Persistence objPer = new Persistence();
 
-        // Método para mostrar todo el inventario
-        public DataSet showInventario()
+        // Método para mostrar todos los registros de inventario
+        public DataSet ShowInventory()
         {
             MySqlDataAdapter objAdapter = new MySqlDataAdapter();
             DataSet objData = new DataSet();
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_read_inventario";
+            objSelectCmd.CommandText = "spGetInventory"; // Procedimiento almacenado para mostrar inventario
             objSelectCmd.CommandType = CommandType.StoredProcedure;
             objAdapter.SelectCommand = objSelectCmd;
             objAdapter.Fill(objData);
@@ -24,29 +24,26 @@ namespace Data
             return objData;
         }
 
-        // Método para guardar un nuevo registro en el inventario
-        public bool saveInventario(int _Cantidad, DateTime _Fecha, string _Observacion, int _ProdId, int _EmpId)
+        // Método para insertar un nuevo registro de inventario
+        public bool InsertInventory(int cantidad, DateTime fecha, string observacion, int fkProductoId, int fkEmpleadoId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_create_inventario";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = _Cantidad;
-            objSelectCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = _Fecha;
-            objSelectCmd.Parameters.Add("p_observacion", MySqlDbType.Text).Value = _Observacion;
-            objSelectCmd.Parameters.Add("p_prod_id", MySqlDbType.Int32).Value = _ProdId;
-            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = _EmpId;
+            MySqlCommand objInsertCmd = new MySqlCommand();
+            objInsertCmd.Connection = objPer.openConnection();
+            objInsertCmd.CommandText = "spInsertInventory"; // Procedimiento almacenado para insertar inventario
+            objInsertCmd.CommandType = CommandType.StoredProcedure;
+            objInsertCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = cantidad;
+            objInsertCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = fecha;
+            objInsertCmd.Parameters.Add("p_observacion", MySqlDbType.Text).Value = observacion;
+            objInsertCmd.Parameters.Add("p_fkproducto_id", MySqlDbType.Int32).Value = fkProductoId;
+            objInsertCmd.Parameters.Add("p_fkempleado_id", MySqlDbType.Int32).Value = fkEmpleadoId;
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objInsertCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -57,29 +54,26 @@ namespace Data
         }
 
         // Método para actualizar un registro de inventario
-        public bool updateInventario(int _InvId, int _Cantidad, DateTime _Fecha, string _Observacion, int _ProdId, int _EmpId)
+        public bool UpdateInventory(int invId, int cantidad, DateTime fecha, string observacion, int fkProducto, int fkEmpleado)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_update_inventario";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_inv_id", MySqlDbType.Int32).Value = _InvId;
-            objSelectCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = _Cantidad;
-            objSelectCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = _Fecha;
-            objSelectCmd.Parameters.Add("p_observacion", MySqlDbType.Text).Value = _Observacion;
-            objSelectCmd.Parameters.Add("p_prod_id", MySqlDbType.Int32).Value = _ProdId;
-            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = _EmpId;
+            MySqlCommand objUpdateCmd = new MySqlCommand();
+            objUpdateCmd.Connection = objPer.openConnection();
+            objUpdateCmd.CommandText = "spUpdateInventory"; // Procedimiento almacenado para actualizar inventario
+            objUpdateCmd.CommandType = CommandType.StoredProcedure;
+            objUpdateCmd.Parameters.Add("p_inv_id", MySqlDbType.Int32).Value = invId;
+            objUpdateCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = cantidad;
+            objUpdateCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = fecha;
+            objUpdateCmd.Parameters.Add("p_observacion", MySqlDbType.Text).Value = observacion;
+            objUpdateCmd.Parameters.Add("p_fkproducto", MySqlDbType.Int32).Value = fkProducto;
+            objUpdateCmd.Parameters.Add("p_fkempleado", MySqlDbType.Int32).Value = fkEmpleado;
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objUpdateCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -90,24 +84,21 @@ namespace Data
         }
 
         // Método para eliminar un registro de inventario
-        public bool deleteInventario(int _InvId)
+        public bool DeleteInventory(int invId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_delete_inventario";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_inv_id", MySqlDbType.Int32).Value = _InvId;
+            MySqlCommand objDeleteCmd = new MySqlCommand();
+            objDeleteCmd.Connection = objPer.openConnection();
+            objDeleteCmd.CommandText = "spDeleteInventory"; // Procedimiento almacenado para eliminar inventario
+            objDeleteCmd.CommandType = CommandType.StoredProcedure;
+            objDeleteCmd.Parameters.Add("p_inv_id", MySqlDbType.Int32).Value = invId;
 
             try
             {
-                row = objSelectCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objDeleteCmd.ExecuteNonQuery();
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -117,31 +108,15 @@ namespace Data
             return executed;
         }
 
-        // Método para obtener inventario con empleado y producto
-        public DataSet getInventarioWithEmpleadoAndProducto()
+        // Método para obtener inventario en formato DDL
+        public DataSet ShowInventoryDDL()
         {
             MySqlDataAdapter objAdapter = new MySqlDataAdapter();
             DataSet objData = new DataSet();
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_get_inventario_with_empleado_and_producto";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objAdapter.SelectCommand = objSelectCmd;
-            objAdapter.Fill(objData);
-            objPer.closeConnection();
-            return objData;
-        }
-
-        // Método para obtener productos con inventario y categoría
-        public DataSet getProductosWithInventarioAndCategoria()
-        {
-            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
-            DataSet objData = new DataSet();
-
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_get_productos_with_inventario_and_categoria";
+            objSelectCmd.CommandText = "spGetInventoryDDL"; // Procedimiento almacenado para DDL de inventario
             objSelectCmd.CommandType = CommandType.StoredProcedure;
             objAdapter.SelectCommand = objSelectCmd;
             objAdapter.Fill(objData);
