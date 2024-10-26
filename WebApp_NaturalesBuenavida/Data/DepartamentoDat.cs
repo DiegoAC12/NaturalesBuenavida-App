@@ -4,31 +4,51 @@ using System.Data;
 
 namespace Data
 {
-    public class DataDepartamento
+    public class DepartamentoDat
     {
+        // Instancia de la clase Persistence para la conexión a la base de datos
         Persistence objPer = new Persistence();
 
+        // Método para obtener todos los departamentos
+        public DataSet ShowDepartamentos()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            // Configuración del comando para seleccionar departamentos
+            MySqlCommand objSelectCmd = new MySqlCommand
+            {
+                Connection = objPer.openConnection(),
+                CommandText = "spSelectDepartamento", // Procedimiento almacenado para seleccionar departamentos
+                CommandType = CommandType.StoredProcedure
+            };
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData); // Llena el DataSet con los datos obtenidos
+            objPer.closeConnection();
+            return objData;
+        }
+
         // Método para insertar un nuevo departamento
-        public bool insertarDepartamento(string codigo, string nombre, int paisId)
+        public bool InsertDepartamento(string codigo, string nombre, int fkPaisId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objInsertCmd = new MySqlCommand();
-            objInsertCmd.Connection = objPer.openConnection();
-            objInsertCmd.CommandText = "sp_insertar_departamento";
-            objInsertCmd.CommandType = CommandType.StoredProcedure;
+            // Configuración del comando para insertar un nuevo departamento
+            MySqlCommand objInsertCmd = new MySqlCommand
+            {
+                Connection = objPer.openConnection(),
+                CommandText = "spInsertDepartamento", // Procedimiento almacenado para insertar departamento
+                CommandType = CommandType.StoredProcedure
+            };
             objInsertCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
             objInsertCmd.Parameters.Add("p_nombre", MySqlDbType.VarChar).Value = nombre;
-            objInsertCmd.Parameters.Add("p_pais_id", MySqlDbType.Int32).Value = paisId;
+            objInsertCmd.Parameters.Add("p_fkpais_id", MySqlDbType.Int32).Value = fkPaisId;
 
             try
             {
-                row = objInsertCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                row = objInsertCmd.ExecuteNonQuery(); // Ejecuta el comando
+                executed = row == 1; // Verifica si se ejecutó correctamente
             }
             catch (Exception e)
             {
@@ -38,33 +58,19 @@ namespace Data
             return executed;
         }
 
-        // Método para mostrar un departamento por ID
-        public DataSet mostrarDepartamento(int id)
-        {
-            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
-            DataSet objData = new DataSet();
-
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_mostrar_departamento";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
-            objAdapter.SelectCommand = objSelectCmd;
-            objAdapter.Fill(objData);
-            objPer.closeConnection();
-            return objData;
-        }
-
-        // Método para actualizar un departamento
-        public bool actualizarDepartamento(int id, string codigo, string nombre, int paisId)
+        // Método para actualizar un departamento existente
+        public bool UpdateDepartamento(int id, string codigo, string nombre, int paisId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objUpdateCmd = new MySqlCommand();
-            objUpdateCmd.Connection = objPer.openConnection();
-            objUpdateCmd.CommandText = "sp_actualizar_departamento";
-            objUpdateCmd.CommandType = CommandType.StoredProcedure;
+            // Configuración del comando para actualizar un departamento
+            MySqlCommand objUpdateCmd = new MySqlCommand
+            {
+                Connection = objPer.openConnection(),
+                CommandText = "sp_actualizar_departamento", // Procedimiento almacenado para actualizar departamento
+                CommandType = CommandType.StoredProcedure
+            };
             objUpdateCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
             objUpdateCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
             objUpdateCmd.Parameters.Add("p_nombre", MySqlDbType.VarChar).Value = nombre;
@@ -73,10 +79,7 @@ namespace Data
             try
             {
                 row = objUpdateCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -87,24 +90,24 @@ namespace Data
         }
 
         // Método para eliminar un departamento
-        public bool eliminarDepartamento(int id)
+        public bool DeleteDepartamento(int id)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objDeleteCmd = new MySqlCommand();
-            objDeleteCmd.Connection = objPer.openConnection();
-            objDeleteCmd.CommandText = "sp_eliminar_departamento";
-            objDeleteCmd.CommandType = CommandType.StoredProcedure;
+            // Configuración del comando para eliminar un departamento
+            MySqlCommand objDeleteCmd = new MySqlCommand
+            {
+                Connection = objPer.openConnection(),
+                CommandText = "sp_eliminar_departamento", // Procedimiento almacenado para eliminar departamento
+                CommandType = CommandType.StoredProcedure
+            };
             objDeleteCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
 
             try
             {
                 row = objDeleteCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -112,6 +115,25 @@ namespace Data
             }
             objPer.closeConnection();
             return executed;
+        }
+
+        // Método para obtener todos los departamentos para un DropDownList
+        public DataSet GetDepartamentosDDL()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            // Configuración del comando para seleccionar departamentos para DDL
+            MySqlCommand objSelectCmd = new MySqlCommand
+            {
+                Connection = objPer.openConnection(),
+                CommandText = "spSelectDepartamentoDDL", // Procedimiento almacenado para DDL de departamentos
+                CommandType = CommandType.StoredProcedure
+            };
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
         }
     }
 }
