@@ -1,46 +1,117 @@
-﻿using System.Data;
-using Data;
+using MySql.Data.MySqlClient;
+using System;
+using System.Data;
 
-namespace Logic
+namespace Data
 {
-    public class CiudadLog
+    public class DataCiudad
     {
-        // Instancia de la clase CiudadDat que maneja la interacción con la base de datos
-        CiudadDat CiudadDat = new CiudadDat();
+        Persistence objPer = new Persistence();
 
-        // Método para obtener todas las ciudades desde la capa de datos
-        public DataSet GetCiudades()
+        // Método para insertar una nueva ciudad
+        public bool insertarCiudad(string codigo, string nombre, int depId)
         {
-            // Llama al método ShowCiudades en la capa de datos para recuperar el conjunto de ciudades
-            return CiudadDat.ShowCiudades();
+            bool executed = false;
+            int row;
+
+            MySqlCommand objInsertCmd = new MySqlCommand();
+            objInsertCmd.Connection = objPer.openConnection();
+            objInsertCmd.CommandText = "sp_insertar_ciudad";
+            objInsertCmd.CommandType = CommandType.StoredProcedure;
+            objInsertCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
+            objInsertCmd.Parameters.Add("p_nombre", MySqlDbType.VarChar).Value = nombre;
+            objInsertCmd.Parameters.Add("p_dep_id", MySqlDbType.Int32).Value = depId;
+
+            try
+            {
+                row = objInsertCmd.ExecuteNonQuery();
+                if (row == 1)
+                {
+                    executed = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.ToString());
+            }
+            objPer.closeConnection();
+            return executed;
         }
 
-        // Método para insertar una nueva ciudad en la base de datos
-        public bool AddCiudad(string codigo, string nombre, int depId)
+        // Método para mostrar una ciudad por ID
+        public DataSet mostrarCiudad(int id)
         {
-            // Llama al método InsertCiudad en la capa de datos para insertar la ciudad con los parámetros proporcionados
-            return CiudadDat.InsertCiudad(codigo, nombre, depId);
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "sp_mostrar_ciudad";
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objSelectCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
         }
 
-        // Método para actualizar los datos de una ciudad existente
-        public bool EditCiudad(int id, string codigo, string nombre, int depId)
+        // Método para actualizar una ciudad
+        public bool actualizarCiudad(int id, string codigo, string nombre, int depId)
         {
-            // Llama al método UpdateCiudad en la capa de datos para actualizar la ciudad identificada por el ID
-            return CiudadDat.UpdateCiudad(id, codigo, nombre, depId);
+            bool executed = false;
+            int row;
+
+            MySqlCommand objUpdateCmd = new MySqlCommand();
+            objUpdateCmd.Connection = objPer.openConnection();
+            objUpdateCmd.CommandText = "sp_actualizar_ciudad";
+            objUpdateCmd.CommandType = CommandType.StoredProcedure;
+            objUpdateCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
+            objUpdateCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
+            objUpdateCmd.Parameters.Add("p_nombre", MySqlDbType.VarChar).Value = nombre;
+            objUpdateCmd.Parameters.Add("p_dep_id", MySqlDbType.Int32).Value = depId;
+
+            try
+            {
+                row = objUpdateCmd.ExecuteNonQuery();
+                if (row == 1)
+                {
+                    executed = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.ToString());
+            }
+            objPer.closeConnection();
+            return executed;
         }
 
-        // Método para eliminar una ciudad de la base de datos
-        public bool RemoveCiudad(int id)
+        // Método para eliminar una ciudad
+        public bool eliminarCiudad(int id)
         {
-            // Llama al método DeleteCiudad en la capa de datos para eliminar la ciudad por su ID
-            return CiudadDat.DeleteCiudad(id);
-        }
+            bool executed = false;
+            int row;
 
-        // Método para obtener un conjunto de datos de ciudades para usar en un DropDownList
-        public DataSet GetCiudadesDDL()
-        {
-            // Llama al método GetCiudadesDDL en la capa de datos para obtener el conjunto de ciudades
-            return CiudadDat.GetCiudadesDDL();
-        }
-    }
+            MySqlCommand objDeleteCmd = new MySqlCommand();
+            objDeleteCmd.Connection = objPer.openConnection();
+            objDeleteCmd.CommandText = "sp_eliminar_ciudad";
+            objDeleteCmd.CommandType = CommandType.StoredProcedure;
+            objDeleteCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
+
+            try
+            {
+                row = objDeleteCmd.ExecuteNonQuery();
+                if (row == 1)
+                {
+                    executed = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.ToString());
+            }
+            objPer.closeConnection();
+            return executed;
+        }
+    }
 }
