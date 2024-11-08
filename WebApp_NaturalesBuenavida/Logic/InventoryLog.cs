@@ -5,36 +5,36 @@ namespace Logic
 {
     public class InventoryLog
     {
-        DataInventory dataInventory = new DataInventory();
+        InventoryDat objInv = new InventoryDat();
 
-        // L骻ica para mostrar todos los registros de inventario
-        public DataSet GetInventory()
+        // L贸gica para mostrar todos los registros de inventario
+        public DataSet ShowInventory()
         {
-            return dataInventory.ShowInventory();
+            return objInv.ShowInventory();
         }
 
-        // L骻ica para insertar un nuevo registro de inventario
+        // L贸gica para insertar un nuevo registro de inventario
         public bool AddInventory(int cantidad, DateTime fecha, string observacion, int fkProductoId, int fkEmpleadoId)
         {
-            return dataInventory.InsertInventory(cantidad, fecha, observacion, fkProductoId, fkEmpleadoId);
+            return objInv.InsertInventory(cantidad, fecha, observacion, fkProductoId, fkEmpleadoId);
         }
 
-        // L骻ica para actualizar un registro de inventario
-        public bool EditInventory(int invId, int cantidad, DateTime fecha, string observacion, int fkProducto, int fkEmpleado)
+        // L贸gica para actualizar un registro de inventario
+        public bool UpdateInventory(int invId, int cantidad, DateTime fecha, string observacion, int fkProducto, int fkEmpleado)
         {
-            return dataInventory.UpdateInventory(invId, cantidad, fecha, observacion, fkProducto, fkEmpleado);
+            return objInv.UpdateInventory(invId, cantidad, fecha, observacion, fkProducto, fkEmpleado);
         }
 
-        // L骻ica para eliminar un registro de inventario
-        public bool RemoveInventory(int invId)
+        // L贸gica para eliminar un registro de inventario
+        public bool DeleteInventory(int invId)
         {
-            return dataInventory.DeleteInventory(invId);
+            return objInv.DeleteInventory(invId);
         }
 
-        // L骻ica para mostrar el inventario en formato DDL
-        public DataSet GetInventoryDDL()
+        // L贸gica para mostrar el inventario en formato DDL
+        public DataSet ShowInventoryDDL()
         {
-            return dataInventory.ShowInventoryDDL();
+            return objInv.ShowInventoryDDL();
         }
     }
 }
