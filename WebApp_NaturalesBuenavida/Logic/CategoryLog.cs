@@ -26,13 +26,13 @@ namespace Logic
         }
 
         // Lógica para eliminar una categoría
-        public bool RemoveCategory(int catId)
+        public bool DeleteCategory(int catId)
         {
             return objCat.DeleteCategory(catId);
         }
 
         // Lógica para obtener las categorías en formato DDL
-        public DataSet GetCategoriesDDL()
+        public DataSet ShowCategoriesDDL()
         {
             return objCat.ShowCategoriesDDL();
         }
