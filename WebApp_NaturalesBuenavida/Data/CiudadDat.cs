@@ -4,19 +4,35 @@ using System.Data;
 
 namespace Data
 {
-    public class DataCiudad
+    public class CiudadDat
     {
         Persistence objPer = new Persistence();
 
+        // Método para obtener todas las ciudades
+        public DataSet ShowCiudades()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spSelectCiudad"; // Procedimiento almacenado para seleccionar ciudades
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
+        }
+
         // Método para insertar una nueva ciudad
-        public bool insertarCiudad(string codigo, string nombre, int depId)
+        public bool InsertCiudad(string codigo, string nombre, int depId)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objInsertCmd = new MySqlCommand();
             objInsertCmd.Connection = objPer.openConnection();
-            objInsertCmd.CommandText = "sp_insertar_ciudad";
+            objInsertCmd.CommandText = "spInsertCiudad"; // Procedimiento almacenado para insertar ciudad
             objInsertCmd.CommandType = CommandType.StoredProcedure;
             objInsertCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
             objInsertCmd.Parameters.Add("p_nombre", MySqlDbType.VarChar).Value = nombre;
@@ -25,10 +41,7 @@ namespace Data
             try
             {
                 row = objInsertCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -38,32 +51,15 @@ namespace Data
             return executed;
         }
 
-        // Método para mostrar una ciudad por ID
-        public DataSet mostrarCiudad(int id)
-        {
-            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
-            DataSet objData = new DataSet();
-
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_mostrar_ciudad";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
-            objAdapter.SelectCommand = objSelectCmd;
-            objAdapter.Fill(objData);
-            objPer.closeConnection();
-            return objData;
-        }
-
-        // Método para actualizar una ciudad
-        public bool actualizarCiudad(int id, string codigo, string nombre, int depId)
+        // Método para actualizar una ciudad existente
+        public bool UpdateCiudad(int id, string codigo, string nombre, int depId)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objUpdateCmd = new MySqlCommand();
             objUpdateCmd.Connection = objPer.openConnection();
-            objUpdateCmd.CommandText = "sp_actualizar_ciudad";
+            objUpdateCmd.CommandText = "spUpdateCiudad"; // Procedimiento almacenado para actualizar ciudad
             objUpdateCmd.CommandType = CommandType.StoredProcedure;
             objUpdateCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
             objUpdateCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
@@ -73,10 +69,7 @@ namespace Data
             try
             {
                 row = objUpdateCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -87,24 +80,21 @@ namespace Data
         }
 
         // Método para eliminar una ciudad
-        public bool eliminarCiudad(int id)
+        public bool DeleteCiudad(int id)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objDeleteCmd = new MySqlCommand();
             objDeleteCmd.Connection = objPer.openConnection();
-            objDeleteCmd.CommandText = "sp_eliminar_ciudad";
+            objDeleteCmd.CommandText = "spDeleteCiudad"; // Procedimiento almacenado para eliminar ciudad
             objDeleteCmd.CommandType = CommandType.StoredProcedure;
             objDeleteCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
 
             try
             {
                 row = objDeleteCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -112,6 +102,22 @@ namespace Data
             }
             objPer.closeConnection();
             return executed;
+        }
+		
+		// Método para obtener todas las ciudades (DDL)
+        public DataSet ShowCiudadesDDL()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spSelectCiudadDDL"; // Procedimiento almacenado para el DDL de ciudades
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
         }
     }
 }
