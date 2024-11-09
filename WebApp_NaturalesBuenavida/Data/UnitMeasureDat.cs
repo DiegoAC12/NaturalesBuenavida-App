@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -18,6 +20,23 @@ namespace Data
 
             objSelectCmd.Connection = objPer.openConnection();
             objSelectCmd.CommandText = "sp_mostrar_unidades"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+
+            return objData;
+        }
+        // Método para mostrar las unidades de medida mediante el nuevo procedimiento
+        public DataSet ShowDDLUnitMeasure()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+            MySqlCommand objSelectCmd = new MySqlCommand();
+
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spDDL_mostrar_unidad_medida"; // nombre del procedimiento DDL
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             objAdapter.SelectCommand = objSelectCmd;
