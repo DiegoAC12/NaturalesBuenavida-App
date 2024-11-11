@@ -5,7 +5,7 @@ namespace Logic
 {
     public class SupplierLog
     {
-        DataSupplier dataSupplier = new DataSupplier();
+        SupplierDat dataSupplier = new SupplierDat();
 
         // Lógica para insertar un proveedor
         public void InsertSupplier(int personaId)

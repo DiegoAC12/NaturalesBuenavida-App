@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Data;
 
@@ -5,7 +6,7 @@ namespace Logic
 {
     public class InventoryLog
     {
-        DataInventory dataInventory = new DataInventory();
+        InventoryDat dataInventory = new InventoryDat();
 
         // Lógica para mostrar todos los registros de inventario
         public DataSet GetInventory()

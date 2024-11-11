@@ -5,7 +5,7 @@ namespace Logic
 {
     public class EmployeeLog
     {
-        DataEmployee dataEmployee = new DataEmployee();
+        EmployeeDat dataEmployee = new EmployeeDat();
 
         // Lógica para obtener todos los empleados
         public DataSet GetEmployees()

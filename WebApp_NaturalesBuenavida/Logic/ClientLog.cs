@@ -25,12 +25,23 @@ namespace Logic
         //Metodo para guardar una nueva Categoria
         public bool saveClient(int _fkpersona_id)
         {
+            //return objClient.saveClient(_fkpersona_id);
+            // Verificar si la persona ya está registrada como cliente
+            if (objClient.isPersonRegistered(_fkpersona_id))
+            {
+                return false; // Ya registrado, no permitir guardar
+            }
+
             return objClient.saveClient(_fkpersona_id);
         }
         //Metodo para actualizar una Categoria
         public bool updateClient(int _cliente_id, int _fkpersona_id)
         {
             return objClient.updateClient(_cliente_id, _fkpersona_id);
+        }
+        public bool deleteClient(int _idCliente)
+        {
+            return objClient.deleteClient(_idCliente);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Data
     {
         Persistence objPer = new Persistence();
 
-        //Metodo para mostrar todas las Categorias
+        //Metodo para mostrar todos los clientes
         public DataSet showClient()
         {
             MySqlDataAdapter objAdapter = new MySqlDataAdapter();
@@ -113,5 +113,56 @@ namespace Data
             return executed;
 
         }
+
+        public bool deleteClient(int _idCliente)
+        {
+            bool executed = false;
+            int row;
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spDeleteCliente"; //nombre del procedimiento almacenado
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objSelectCmd.Parameters.Add("p_cliente_id", MySqlDbType.Int32).Value = _idCliente;
+
+            try
+            {
+                row = objSelectCmd.ExecuteNonQuery();
+                if (row == 1)
+                {
+                    executed = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error " + e.ToString());
+            }
+            objPer.closeConnection();
+            return executed;
+        }
+
+        public bool isPersonRegistered(int _fkpersona_id)
+        {
+            bool exists = false;
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spCheckPersonRegisteredAsClient"; // Procedimiento almacenado
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objSelectCmd.Parameters.Add("p_fkpersona_id", MySqlDbType.Int32).Value = _fkpersona_id;
+
+            try
+            {
+                exists = Convert.ToBoolean(objSelectCmd.ExecuteScalar());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error " + e.ToString());
+            }
+
+            objPer.closeConnection();
+            return exists;
+        }
+
     }
 }

@@ -5,7 +5,7 @@ namespace Logic
 {
     public class CategoryLog
     {
-        DataCategory dataCategory = new DataCategory();
+        CategoryDat dataCategory = new CategoryDat();
 
         // Lógica para obtener todas las categorías
         public DataSet GetCategories()
