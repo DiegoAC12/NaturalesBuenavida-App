@@ -5,36 +5,36 @@ namespace Logic
 {
     public class SupplierLog
     {
-        SupplierDat dataSupplier = new SupplierDat();
+        SupplierDat objSup = new SupplierDat();
 
-        // L骻ica para insertar un proveedor
+        // L贸gica para insertar un proveedor
         public void InsertSupplier(int personaId)
         {
-            dataSupplier.InsertSupplier(personaId);
+            objSup.InsertSupplier(personaId);
         }
 
-        // L骻ica para obtener todos los proveedores
-        public DataSet GetSupplier()
+        // L贸gica para obtener todos los proveedores
+        public DataSet ShowSupplier()
         {
-            return dataSupplier.GetSupplier();
+            return objSup.GetSupplier();
         }
 
-        // L骻ica para actualizar un proveedor
+        // L贸gica para actualizar un proveedor
         public void UpdateSupplier(int provId, int personaId)
         {
-            dataSupplier.UpdateSupplier(provId, personaId);
+            objSup.UpdateSupplier(provId, personaId);
         }
 
-        // L骻ica para eliminar un proveedor
+        // L贸gica para eliminar un proveedor
         public void DeleteSupplier(int provId)
         {
-            dataSupplier.DeleteSupplier(provId);
+            objSup.DeleteSupplier(provId);
         }
 
-        // L骻ica para obtener proveedores en formato DDL
-        public DataSet GetSupplierDDL()
+        // L贸gica para obtener proveedores en formato DDL
+        public DataSet ShowSupplierDDL()
         {
-            return dataSupplier.GetSupplierDDL();
+            return objSup.GetSupplierDDL();
         }
     }
 }

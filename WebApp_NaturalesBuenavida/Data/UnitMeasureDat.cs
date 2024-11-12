@@ -28,6 +28,23 @@ namespace Data
 
             return objData;
         }
+        // Método para mostrar las unidades de medida mediante el nuevo procedimiento
+        public DataSet ShowDDLUnitMeasure()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+            MySqlCommand objSelectCmd = new MySqlCommand();
+
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spDDL_mostrar_unidad_medida"; // nombre del procedimiento DDL
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+
+            return objData;
+        }
 
         // Método para guardar una nueva unidad de medida
         public bool SaveUnit(string descripcion)

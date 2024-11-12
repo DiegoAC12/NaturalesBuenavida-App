@@ -1,22 +1,38 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 
 namespace Data
 {
-    public class DataPais
+    public class PaisDat
     {
         Persistence objPer = new Persistence();
 
+        // Método para mostrar todos los países
+        public DataSet ShowPais()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spSelectPais"; // Procedimiento almacenado para seleccionar países
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
+        }
+
         // Método para insertar un nuevo país
-        public bool insertarPais(string codigo, string nombre)
+        public bool InsertPais(string codigo, string nombre)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objInsertCmd = new MySqlCommand();
             objInsertCmd.Connection = objPer.openConnection();
-            objInsertCmd.CommandText = "sp_insertar_pais";
+            objInsertCmd.CommandText = "spCreatePais"; // Procedimiento almacenado para insertar país
             objInsertCmd.CommandType = CommandType.StoredProcedure;
             objInsertCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
             objInsertCmd.Parameters.Add("p_nombre", MySqlDbType.VarChar).Value = nombre;
@@ -24,10 +40,7 @@ namespace Data
             try
             {
                 row = objInsertCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -37,32 +50,15 @@ namespace Data
             return executed;
         }
 
-        // Método para mostrar un país por ID
-        public DataSet mostrarPais(int id)
-        {
-            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
-            DataSet objData = new DataSet();
-
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_mostrar_pais";
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-            objSelectCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
-            objAdapter.SelectCommand = objSelectCmd;
-            objAdapter.Fill(objData);
-            objPer.closeConnection();
-            return objData;
-        }
-
-        // Método para actualizar un país
-        public bool actualizarPais(int id, string codigo, string nombre)
+        // Método para actualizar un país existente
+        public bool UpdatePais(int id, string codigo, string nombre)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objUpdateCmd = new MySqlCommand();
             objUpdateCmd.Connection = objPer.openConnection();
-            objUpdateCmd.CommandText = "sp_actualizar_pais";
+            objUpdateCmd.CommandText = "spUpdatepais"; // Procedimiento almacenado para actualizar país
             objUpdateCmd.CommandType = CommandType.StoredProcedure;
             objUpdateCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
             objUpdateCmd.Parameters.Add("p_codigo", MySqlDbType.VarChar).Value = codigo;
@@ -71,10 +67,7 @@ namespace Data
             try
             {
                 row = objUpdateCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -85,24 +78,21 @@ namespace Data
         }
 
         // Método para eliminar un país
-        public bool eliminarPais(int id)
+        public bool DeletePais(int id)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objDeleteCmd = new MySqlCommand();
             objDeleteCmd.Connection = objPer.openConnection();
-            objDeleteCmd.CommandText = "sp_eliminar_pais";
+            objDeleteCmd.CommandText = "spDeletepais"; // Procedimiento almacenado para eliminar país
             objDeleteCmd.CommandType = CommandType.StoredProcedure;
             objDeleteCmd.Parameters.Add("p_id", MySqlDbType.Int32).Value = id;
 
             try
             {
                 row = objDeleteCmd.ExecuteNonQuery();
-                if (row == 1)
-                {
-                    executed = true;
-                }
+                executed = row == 1;
             }
             catch (Exception e)
             {
@@ -111,5 +101,21 @@ namespace Data
             objPer.closeConnection();
             return executed;
         }
-    }
+
+        // Método para mostrar país DDL
+        public DataSet ShowPaisDDL()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectDDL = new MySqlCommand();
+            objSelectDDL.Connection = objPer.openConnection();
+            objSelectDDL.CommandText = "spSelectPaisDDL"; // Procedimiento almacenado para selección DDL de país
+            objSelectDDL.CommandType = CommandType.StoredProcedure;
+            objAdapter.SelectCommand = objSelectDDL;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
+        }
+    }
 }

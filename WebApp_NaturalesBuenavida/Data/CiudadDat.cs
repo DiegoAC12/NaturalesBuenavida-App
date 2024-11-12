@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 
@@ -57,6 +57,7 @@ namespace Data
             bool executed = false;
             int row;
 
+
             MySqlCommand objUpdateCmd = new MySqlCommand();
             objUpdateCmd.Connection = objPer.openConnection();
             objUpdateCmd.CommandText = "spUpdateCiudad"; // Procedimiento almacenado para actualizar ciudad
@@ -79,12 +80,12 @@ namespace Data
             return executed;
         }
 
+
         // Método para eliminar una ciudad
         public bool DeleteCiudad(int id)
         {
             bool executed = false;
             int row;
-
             MySqlCommand objDeleteCmd = new MySqlCommand();
             objDeleteCmd.Connection = objPer.openConnection();
             objDeleteCmd.CommandText = "spDeleteCiudad"; // Procedimiento almacenado para eliminar ciudad

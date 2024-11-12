@@ -5,36 +5,36 @@ namespace Logic
 {
     public class EmployeeLog
     {
-        EmployeeDat dataEmployee = new EmployeeDat();
+        EmployeeDat objEmp = new EmployeeDat();
 
-        // L骻ica para obtener todos los empleados
-        public DataSet GetEmployees()
+        // L贸gica para obtener todos los empleados
+        public DataSet ShowEmployees()
         {
-            return dataEmployee.ShowEmployees();
+            return objEmp.ShowEmployees();
         }
 
-        // L骻ica para guardar un nuevo empleado
+        // L贸gica para guardar un nuevo empleado
         public bool AddEmployee(int personaId)
         {
-            return dataEmployee.SaveEmployee(personaId);
+            return objEmp.SaveEmployee(personaId);
         }
 
-        // L骻ica para actualizar un empleado
+        // L贸gica para actualizar un empleado
         public bool EditEmployee(int empId, int personaId)
         {
-            return dataEmployee.UpdateEmployee(empId, personaId);
+            return objEmp.UpdateEmployee(empId, personaId);
         }
 
-        // L骻ica para eliminar un empleado
-        public bool RemoveEmployee(int empId)
+        // L贸gica para eliminar un empleado
+        public bool DeleteEmployee(int empId)
         {
-            return dataEmployee.DeleteEmployee(empId);
+            return objEmp.DeleteEmployee(empId);
         }
 
-        // L骻ica para mostrar empleados con DDL
-        public DataSet GetEmployeesDDL()
+        // L贸gica para mostrar empleados con DDL
+        public DataSet ShowEmployeesDDL()
         {
-            return dataEmployee.ShowEmployeesDDL();
+            return objEmp.ShowEmployeesDDL();
         }
     }
 }

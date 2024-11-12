@@ -28,6 +28,23 @@ namespace Data
 
             return objData;
         }
+        // Método para mostrar las ventas desde el procedimiento DDL
+        public DataSet ShowDDLSales()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+            MySqlCommand objSelectCmd = new MySqlCommand();
+
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spDDL_mostrar_ventas"; // nombre del procedimiento almacenado DDL
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+
+            return objData;
+        }
 
         // Método para guardar una nueva venta
         public bool SaveSale(DateTime fecha, decimal total, string descripcion, int clienteId, int empleadoId)

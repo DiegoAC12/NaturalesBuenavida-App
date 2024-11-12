@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using System;
 using System.Data;
 
@@ -25,7 +25,7 @@ namespace Data
         }
 
         // Método para insertar una nueva persona
-        public bool InsertPersona(string identificacion, string nombreRazonSocial, string apellido, string telefono,
+        public bool InsertPersona(string identificacion, string nombreRazonSocial, string apellido, string telefono, 
                                   string direccion, string correoElectronico, int fkDocId, int fkPaisId)
         {
             bool executed = false;
@@ -58,7 +58,7 @@ namespace Data
         }
 
         // Método para actualizar una persona existente
-        public bool UpdatePersona(int id, string identificacion, string nombreRazonSocial, string apellido,
+        public bool UpdatePersona(int id, string identificacion, string nombreRazonSocial, string apellido, 
                                   string telefono, string direccion, string correoElectronico, int docId, int paisId)
         {
             bool executed = false;
@@ -115,8 +115,8 @@ namespace Data
             objPer.closeConnection();
             return executed;
         }
-
-        // Método para obtener todas las personas (DDL)
+		
+		// Método para obtener todas las personas (DDL)
         public DataSet GetPersonasDDL()
         {
             MySqlDataAdapter objAdapter = new MySqlDataAdapter();

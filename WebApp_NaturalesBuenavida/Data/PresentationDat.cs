@@ -28,6 +28,23 @@ namespace Data
 
             return objData;
         }
+        // Método para mostrar presentaciones mediante el nuevo procedimiento DDL
+        public DataSet ShowPresentationDDL()
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+            MySqlCommand objSelectCmd = new MySqlCommand();
+
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spDDL_mostrar_presentacion"; // nombre del procedimiento DDL
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+
+            return objData;
+        }
 
         // Método para guardar una nueva presentación
         public bool SavePresentation(string descripcion)

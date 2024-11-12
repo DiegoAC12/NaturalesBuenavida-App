@@ -5,36 +5,36 @@ namespace Logic
 {
     public class CategoryLog
     {
-        CategoryDat dataCategory = new CategoryDat();
+        CategoryDat objCat = new CategoryDat();
 
-        // L骻ica para obtener todas las categor韆s
-        public DataSet GetCategories()
+        // L贸gica para obtener todas las categor铆as
+        public DataSet ShowCategories()
         {
-            return dataCategory.ShowCategories();
+            return objCat.ShowCategories();
         }
 
-        // L骻ica para crear una nueva categor韆
+        // L贸gica para crear una nueva categor铆a
         public bool AddCategory(string descripcion)
         {
-            return dataCategory.CreateCategory(descripcion);
+            return objCat.CreateCategory(descripcion);
         }
 
-        // L骻ica para actualizar una categor韆
+        // L贸gica para actualizar una categor铆a
         public bool EditCategory(int catId, string descripcion)
         {
-            return dataCategory.UpdateCategory(catId, descripcion);
+            return objCat.UpdateCategory(catId, descripcion);
         }
 
-        // L骻ica para eliminar una categor韆
-        public bool RemoveCategory(int catId)
+        // L贸gica para eliminar una categor铆a
+        public bool DeleteCategory(int catId)
         {
-            return dataCategory.DeleteCategory(catId);
+            return objCat.DeleteCategory(catId);
         }
 
-        // L骻ica para obtener las categor韆s en formato DDL
-        public DataSet GetCategoriesDDL()
+        // L贸gica para obtener las categor铆as en formato DDL
+        public DataSet ShowCategoriesDDL()
         {
-            return dataCategory.ShowCategoriesDDL();
+            return objCat.ShowCategoriesDDL();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace Presentation
         protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
 
         /// <summary>
+
         /// Control form1.
         /// </summary>
         /// <remarks>
@@ -33,6 +34,7 @@ namespace Presentation
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
+
         /// Control ContentPlaceHolder1.
         /// </summary>
         /// <remarks>
