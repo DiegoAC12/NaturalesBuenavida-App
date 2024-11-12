@@ -18,14 +18,14 @@ namespace Logic
         }
 
         //Metodo para guardar una nueva Compra
-        public bool saveBuy(DateTime _fecha_compra, double _total, int _fkproducto_id, string _numero_factura, int _cantidad, double _precio_unitario)
+        public bool saveBuy(DateTime _fecha_compra, int _fkproducto_id, int _cantidad, double _precio_unitario, string _numero_factura)
         {
-            return objBuy.saveBuy(_fecha_compra, _total, _fkproducto_id, _numero_factura, _cantidad, _precio_unitario);
+            return objBuy.saveBuy(_fecha_compra, _fkproducto_id, _cantidad, _precio_unitario, _numero_factura);
         }
         //Metodo para actualizar una Compra
-        public bool updateBuy(int _compra_id, DateTime _fecha_compra, double _total, string _numero_factura, int _fkproducto_id, int _cantidad, double _precio_unitario)
+        public bool updateBuy(int _compra_id, DateTime _fecha_compra, int _fkproducto_id, int _cantidad, double _precio_unitario, string _numero_factura)
         {
-            return objBuy.updateBuy(_compra_id,_fecha_compra, _total, _numero_factura, _fkproducto_id, _cantidad, _precio_unitario);
+            return objBuy.updateBuy(_compra_id,_fecha_compra, _fkproducto_id, _cantidad, _precio_unitario, _numero_factura);
         }
     }
 }

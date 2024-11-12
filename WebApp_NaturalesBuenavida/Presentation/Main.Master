@@ -20,6 +20,7 @@
                 <a href="WFSuppliers.aspx">Proveedores</a>
                 <a href="WFEmployees.aspx">Empleados</a>
                 <a href="WFClient.aspx">Clientes</a>
+                <a href="WFBuy.aspx">Compras</a>
                 <a href="#">Usuarios</a>
                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
                 </asp:ContentPlaceHolder>

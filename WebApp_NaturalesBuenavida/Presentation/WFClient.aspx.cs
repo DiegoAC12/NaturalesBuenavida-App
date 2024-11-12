@@ -98,7 +98,7 @@ namespace Presentation
             TBLastNamePerson.Text = "";
             TBPhonePerson.Text = "";
             TBEmailPerson.Text = "";
-
+            LblMsg.Text = "";
         }
 
         protected void GVClient_SelectedIndexChanged(object sender, EventArgs e)
@@ -147,7 +147,7 @@ namespace Presentation
             // Verifica si se ha seleccionado un producto para actualizar
             if (string.IsNullOrEmpty(HFClientID.Value))
             {
-                LblMsg.Text = "No se ha seleccionado un producto para actualizar.";
+                LblMsg.Text = "No se ha seleccionado un cliente para actualizar.";
                 return;
             }
             _id = Convert.ToInt32(HFClientID.Value);
@@ -157,7 +157,7 @@ namespace Presentation
 
             if (executed)
             {
-                LblMsg.Text = "El producto se actualizo exitosamente!";
+                LblMsg.Text = "El cliente se actualizo exitosamente!";
                 clear(); //Se invoca el metodo para limpiar los campos 
             }
             else
