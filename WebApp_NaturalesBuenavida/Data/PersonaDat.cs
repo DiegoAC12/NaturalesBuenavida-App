@@ -130,6 +130,24 @@ namespace Data
             objAdapter.Fill(objData);
             objPer.closeConnection();
             return objData;
-        }
-    }
+        }
+
+        public DataSet GetPersonById(int personId)
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spSelectPersonaById"; // Procedimiento almacenado que selecciona una persona por ID
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objSelectCmd.Parameters.Add("p_persona_id", MySqlDbType.Int32).Value = personId;
+
+            objAdapter.SelectCommand = objSelectCmd;
+            objAdapter.Fill(objData);
+            objPer.closeConnection();
+            return objData;
+        }
+
+    }
 }

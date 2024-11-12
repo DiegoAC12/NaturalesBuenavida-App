@@ -30,11 +30,11 @@ namespace Logic
         {
             return objCiu.DeleteCiudad(id);
         }
-		
-		// Lógica para obtener las ciudades para DDL
+
+        // Lógica para obtener las ciudades para DDL
         public DataSet ShowCiudadesDDL()
         {
-            return objCiu.GetCiudadesDDL();
-        }
-    }
+            return objCiu.ShowCiudadesDDL();
+        }
+    }
 }
