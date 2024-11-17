@@ -19,7 +19,7 @@ namespace Data
             MySqlCommand objSelectCmd = new MySqlCommand();
 
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_mostrar_unidades"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandText = "sp_mostrar_unidad_medida"; // nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             objAdapter.SelectCommand = objSelectCmd;
@@ -54,11 +54,11 @@ namespace Data
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_insertar_unidad"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandText = "sp_insertar_unidad_medida"; // nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la unidad de medida.
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.VarString).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_und_descripcion", MySqlDbType.VarString).Value = descripcion;
 
             try
             {
@@ -84,12 +84,12 @@ namespace Data
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_actualizar_unidad"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandText = "sp_actualizar_unidad_medida"; // nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la unidad de medida.
-            objSelectCmd.Parameters.Add("p_undId", MySqlDbType.Int32).Value = undId;
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.VarString).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_und_id", MySqlDbType.Int32).Value = undId;
+            objSelectCmd.Parameters.Add("p_und_descripcion", MySqlDbType.VarString).Value = descripcion;
 
             try
             {
@@ -115,11 +115,11 @@ namespace Data
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_eliminar_unidad"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandText = "sp_eliminar_unidad_medida"; // nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agrega parámetro al comando para pasar el ID de la unidad de medida.
-            objSelectCmd.Parameters.Add("p_undId", MySqlDbType.Int32).Value = undId;
+            objSelectCmd.Parameters.Add("p_und_id", MySqlDbType.Int32).Value = undId;
 
             try
             {
