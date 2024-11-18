@@ -16,6 +16,11 @@ namespace Logic
         {
             return objPresentation.ShowPresentations();
         }
+        // Método para mostrar EL DDL
+        public DataSet ShowPresentationsDDL()
+        {
+            return objPresentation.ShowPresentationDDL ();
+        }
 
         // Método para guardar una nueva presentación
         public bool SavePresentation(string descripcion)

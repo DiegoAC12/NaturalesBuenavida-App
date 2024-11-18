@@ -19,7 +19,7 @@ namespace Data
             MySqlCommand objSelectCmd = new MySqlCommand();
 
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "sp_mostrar_presentaciones"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandText = "sp_mostrar_presentacion"; // nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             objAdapter.SelectCommand = objSelectCmd;
@@ -58,7 +58,7 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la presentación.
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.VarString).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_pres_descripcion", MySqlDbType.VarString).Value = descripcion;
 
             try
             {
@@ -88,8 +88,8 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la presentación.
-            objSelectCmd.Parameters.Add("p_presId", MySqlDbType.Int32).Value = presId;
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.VarString).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_pres_id", MySqlDbType.Int32).Value = presId;
+            objSelectCmd.Parameters.Add("p_pres_descripcion", MySqlDbType.VarString).Value = descripcion;
 
             try
             {
@@ -119,7 +119,7 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agrega parámetro al comando para pasar el ID de la presentación.
-            objSelectCmd.Parameters.Add("p_presId", MySqlDbType.Int32).Value = presId;
+            objSelectCmd.Parameters.Add("p_pres_id", MySqlDbType.Int32).Value = presId;
 
             try
             {
