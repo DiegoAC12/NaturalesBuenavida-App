@@ -16,6 +16,11 @@ namespace Logic
         {
             return objUnitMeasure.ShowUnits();
         }
+        // Método para mostrar las unidades de medida en un DropDownList
+        public DataSet ShowDDLUnitMeasure()
+        {
+            return objUnitMeasure.ShowDDLUnitMeasure();
+        }
 
         // Método para guardar una nueva unidad de medida
         public bool SaveUnit(string descripcion)

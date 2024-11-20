@@ -58,9 +58,9 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la devolución.
-            objSelectCmd.Parameters.Add("p_fecha_devolucion", MySqlDbType.Date).Value = fechaDevolucion;
-            objSelectCmd.Parameters.Add("p_motivo", MySqlDbType.Text).Value = motivo;
-            objSelectCmd.Parameters.Add("p_ventaId", MySqlDbType.Int32).Value = ventaId;
+            objSelectCmd.Parameters.Add("p_dev_fecha_devolucion", MySqlDbType.Date).Value = fechaDevolucion;
+            objSelectCmd.Parameters.Add("p_dev_motivo", MySqlDbType.Text).Value = motivo;
+            objSelectCmd.Parameters.Add("p_vent_id", MySqlDbType.Int32).Value = ventaId;
 
             try
             {
@@ -90,10 +90,10 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la devolución.
-            objSelectCmd.Parameters.Add("p_devId", MySqlDbType.Int32).Value = devId;
-            objSelectCmd.Parameters.Add("p_fecha_devolucion", MySqlDbType.Date).Value = fechaDevolucion;
-            objSelectCmd.Parameters.Add("p_motivo", MySqlDbType.Text).Value = motivo;
-            objSelectCmd.Parameters.Add("p_ventaId", MySqlDbType.Int32).Value = ventaId;
+            objSelectCmd.Parameters.Add("p_dev_id", MySqlDbType.Int32).Value = devId;
+            objSelectCmd.Parameters.Add("p_dev_fecha_devolucion", MySqlDbType.Date).Value = fechaDevolucion;
+            objSelectCmd.Parameters.Add("p_dev_motivo", MySqlDbType.Text).Value = motivo;
+            objSelectCmd.Parameters.Add("p_vent_id", MySqlDbType.Int32).Value = ventaId;
 
             try
             {
@@ -123,7 +123,7 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agrega parámetro al comando para pasar el ID de la devolución.
-            objSelectCmd.Parameters.Add("p_devId", MySqlDbType.Int32).Value = devId;
+            objSelectCmd.Parameters.Add("p_dev_id", MySqlDbType.Int32).Value = devId;
 
             try
             {

@@ -16,6 +16,11 @@ namespace Logic
         {
             return objReturn.ShowReturns();
         }
+        // Método para mostrar ventas disponibles (DropDownList)
+        public DataSet ShowDevolucionesDDL()
+        {
+            return objReturn.ShowDevolucionesDDL();
+        }
 
         // Método para guardar una nueva devolución
         public bool SaveReturn(DateTime fechaDevolucion, string motivo, int ventaId)

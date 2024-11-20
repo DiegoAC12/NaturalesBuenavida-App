@@ -47,7 +47,7 @@ namespace Data
         }
 
         // Método para guardar una nueva venta
-        public bool SaveSale(DateTime fecha, decimal total, string descripcion, int clienteId, int empleadoId)
+        public bool SaveSale(DateTime fecha, double total, string descripcion, int clienteId, int empleadoId)
         {
             bool executed = false;
             int row;
@@ -58,11 +58,11 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la venta.
-            objSelectCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = fecha;
-            objSelectCmd.Parameters.Add("p_total", MySqlDbType.Decimal).Value = total;
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.Text).Value = descripcion;
-            objSelectCmd.Parameters.Add("p_clienteId", MySqlDbType.Int32).Value = clienteId;
-            objSelectCmd.Parameters.Add("p_empleadoId", MySqlDbType.Int32).Value = empleadoId;
+            objSelectCmd.Parameters.Add("p_vent_fecha", MySqlDbType.Date).Value = fecha;
+            objSelectCmd.Parameters.Add("p_vent_total", MySqlDbType.Double).Value = total;
+            objSelectCmd.Parameters.Add("p_vent_descripcion", MySqlDbType.Text).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_cli_id", MySqlDbType.Int32).Value = clienteId;
+            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = empleadoId;
 
             try
             {
@@ -92,12 +92,12 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agregan parámetros al comando para pasar los valores de la venta.
-            objSelectCmd.Parameters.Add("p_ventId", MySqlDbType.Int32).Value = ventId;
-            objSelectCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = fecha;
-            objSelectCmd.Parameters.Add("p_total", MySqlDbType.Decimal).Value = total;
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.Text).Value = descripcion;
-            objSelectCmd.Parameters.Add("p_clienteId", MySqlDbType.Int32).Value = clienteId;
-            objSelectCmd.Parameters.Add("p_empleadoId", MySqlDbType.Int32).Value = empleadoId;
+            objSelectCmd.Parameters.Add("p_vent_id", MySqlDbType.Int32).Value = ventId;
+            objSelectCmd.Parameters.Add("p_vent_fecha", MySqlDbType.Date).Value = fecha;
+            objSelectCmd.Parameters.Add("p_vent_total", MySqlDbType.Decimal).Value = total;
+            objSelectCmd.Parameters.Add("p_vent_descripcion", MySqlDbType.Text).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_cli_id", MySqlDbType.Int32).Value = clienteId;
+            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = empleadoId;
 
             try
             {
@@ -127,7 +127,7 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agrega parámetro al comando para pasar el ID de la venta.
-            objSelectCmd.Parameters.Add("p_ventId", MySqlDbType.Int32).Value = ventId;
+            objSelectCmd.Parameters.Add("p_vent_id", MySqlDbType.Int32).Value = ventId;
 
             try
             {

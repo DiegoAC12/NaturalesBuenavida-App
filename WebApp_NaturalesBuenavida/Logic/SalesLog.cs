@@ -16,9 +16,15 @@ namespace Logic
         {   
             return objSales.ShowSales();
         }
+        // Mostrar ventas (DDL)
+        public DataSet ShowDDLSales()
+        {
+            return objSales.ShowDDLSales();
+        }
+
 
         // Método para guardar una nueva venta
-        public bool SaveSale(DateTime fecha, decimal total, string descripcion, int clienteId, int empleadoId)
+        public bool SaveSale(DateTime fecha, double total, string descripcion, int clienteId, int empleadoId)
         {
             return objSales.SaveSale(fecha, total, descripcion, clienteId, empleadoId);
         }
