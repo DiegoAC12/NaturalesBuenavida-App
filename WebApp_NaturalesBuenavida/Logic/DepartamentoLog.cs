@@ -34,7 +34,7 @@ namespace Logic
 		// Lógica para obtener los departamentos para DDL
         public DataSet ShowDepartamentosDDL()
         {
-            return objDep.GetDepartamentosDDL();
+            return objDep.ShowDepartamentosDDL();
         }
     }
 }

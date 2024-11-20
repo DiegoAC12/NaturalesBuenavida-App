@@ -35,5 +35,10 @@ namespace Logic
         {
             return objProd.GetProductsDDL();
         }
+
+        public bool deleteProduct(int _prodId)
+        {
+            return objProd.deleteProduct(_prodId);
+        }
     }
 }
