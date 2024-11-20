@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -165,6 +166,35 @@ namespace Data
             objAdapter.Fill(objData);
             objPer.closeConnection();
             return objData;
+        }
+
+        public bool deleteProduct(int _prodId)
+        {
+            bool executed = false;
+            int row;
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spDeleteProduct"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+
+            // Se agrega parámetro al comando para pasar el ID de la presentación.
+            objSelectCmd.Parameters.Add("p_product_id", MySqlDbType.Int32).Value = _prodId;
+
+            try
+            {
+                row = objSelectCmd.ExecuteNonQuery();
+                if (row == 1)
+                {
+                    executed = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error " + e.ToString());
+            }
+            objPer.closeConnection();
+            return executed;
         }
     }
 

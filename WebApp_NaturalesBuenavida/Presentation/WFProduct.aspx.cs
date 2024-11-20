@@ -4,10 +4,14 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Services;
+using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Windows;
 
 namespace Presentation
 {
@@ -79,6 +83,16 @@ namespace Presentation
             return new { data = productsList };
         }
 
+        [WebMethod]
+        public static bool DeleteProduct(int id)
+        {
+            // Crear una instancia de la clase de lógica de productos
+            ProductLog objProd = new ProductLog();
+
+            // Invocar al método para eliminar el producto y devolver el resultado
+            return objProd.deleteProduct(id);
+        }
+
         //private void showProduct()
         //{
         //    DataSet objData = new DataSet();
@@ -90,7 +104,7 @@ namespace Presentation
 
         private void showPresentationDDL()
         {
-            DDLPresentation.DataSource = objPres.ShowDDLPresentation();
+            DDLPresentation.DataSource = objPres.ShowPresentationsDDL();
             DDLPresentation.DataValueField = "pres_id";//Nombre de la llave primaria
             DDLPresentation.DataTextField = "pres_descripcion";
             DDLPresentation.DataBind();
@@ -160,8 +174,10 @@ namespace Presentation
                 _cantidadInventario, _numeroLote, _date, _precioVenta, _precioCompra, _medida, 
                 _fkcategoria, _fkproveedor, _fkunidadmedida, _fkpresentacion);
 
+            
             if (executed)
             {
+                MessageBox.Show("La compra se guardo exitosamente!");
                 LblMsg.Text = "La compra se guardo exitosamente!";
                 clear();//Se invoca el metodo para limpiar los campos 
             }
@@ -170,7 +186,6 @@ namespace Presentation
                 LblMsg.Text = "Error al guardar";
             }
         }
-
         private void clear()
         {
             HFProductID.Value = "";
@@ -187,6 +202,7 @@ namespace Presentation
             DDLSupplier.SelectedIndex = 0;
             DDLUnitMeasure.SelectedIndex = 0;
             DDLPresentation.SelectedIndex = 0;
+            //LblMsg.Text = "";
         }
 
         protected void BtnUpdate_Click(object sender, EventArgs e)
