@@ -16,7 +16,7 @@ namespace Data
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "spGetInventory"; // Procedimiento almacenado para mostrar inventario
+            objSelectCmd.CommandText = "spSelectInventario"; // Procedimiento almacenado para mostrar inventario
             objSelectCmd.CommandType = CommandType.StoredProcedure;
             objAdapter.SelectCommand = objSelectCmd;
             objAdapter.Fill(objData);
@@ -32,13 +32,13 @@ namespace Data
 
             MySqlCommand objInsertCmd = new MySqlCommand();
             objInsertCmd.Connection = objPer.openConnection();
-            objInsertCmd.CommandText = "spInsertInventory"; // Procedimiento almacenado para insertar inventario
+            objInsertCmd.CommandText = "spInsertInventario"; // Procedimiento almacenado para insertar inventario
             objInsertCmd.CommandType = CommandType.StoredProcedure;
-            objInsertCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = cantidad;
-            objInsertCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = fecha;
-            objInsertCmd.Parameters.Add("p_observacion", MySqlDbType.Text).Value = observacion;
-            objInsertCmd.Parameters.Add("p_fkproducto_id", MySqlDbType.Int32).Value = fkProductoId;
-            objInsertCmd.Parameters.Add("p_fkempleado_id", MySqlDbType.Int32).Value = fkEmpleadoId;
+            objInsertCmd.Parameters.Add("p_inv_cantidad", MySqlDbType.Int32).Value = cantidad;
+            objInsertCmd.Parameters.Add("p_inv_fecha", MySqlDbType.Date).Value = fecha;
+            objInsertCmd.Parameters.Add("p_inv_observacion", MySqlDbType.Text).Value = observacion;
+            objInsertCmd.Parameters.Add("p_prod_id", MySqlDbType.Int32).Value = fkProductoId;
+            objInsertCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = fkEmpleadoId;
 
             try
             {
@@ -61,14 +61,14 @@ namespace Data
 
             MySqlCommand objUpdateCmd = new MySqlCommand();
             objUpdateCmd.Connection = objPer.openConnection();
-            objUpdateCmd.CommandText = "spUpdateInventory"; // Procedimiento almacenado para actualizar inventario
+            objUpdateCmd.CommandText = "spUpdateInventario"; // Procedimiento almacenado para actualizar inventario
             objUpdateCmd.CommandType = CommandType.StoredProcedure;
             objUpdateCmd.Parameters.Add("p_inv_id", MySqlDbType.Int32).Value = invId;
-            objUpdateCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = cantidad;
-            objUpdateCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = fecha;
-            objUpdateCmd.Parameters.Add("p_observacion", MySqlDbType.Text).Value = observacion;
-            objUpdateCmd.Parameters.Add("p_fkproducto", MySqlDbType.Int32).Value = fkProducto;
-            objUpdateCmd.Parameters.Add("p_fkempleado", MySqlDbType.Int32).Value = fkEmpleado;
+            objUpdateCmd.Parameters.Add("p_nueva_cantidad", MySqlDbType.Int32).Value = cantidad;
+            objUpdateCmd.Parameters.Add("p_inv_fecha", MySqlDbType.Date).Value = fecha;
+            objUpdateCmd.Parameters.Add("p_inv_observacion", MySqlDbType.Text).Value = observacion;
+            objUpdateCmd.Parameters.Add("p_prod_id", MySqlDbType.Int32).Value = fkProducto;
+            objUpdateCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = fkEmpleado;
 
             try
             {
