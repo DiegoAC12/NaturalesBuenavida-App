@@ -27,5 +27,10 @@ namespace Logic
         {
             return objBuy.updateBuy(_compra_id,_fecha_compra, _fkproducto_id, _cantidad, _precio_unitario, _numero_factura);
         }
+
+        public bool deleteBuy(int _idBuy)
+        {
+            return objBuy.deleteBuy(_idBuy);
+        }
     }
 }

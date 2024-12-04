@@ -71,20 +71,20 @@ namespace Presentation
             return new { data = buysList };
         }
 
-        //[WebMethod]
-        //public static bool DeleteBuy(int id)
-        //{
-        //    // Crear una instancia de la clase de lógica de productos
-        //    BuyLog objBuy = new BuyLog();
+        [WebMethod]
+        public static bool DeleteBuy(int id)
+        {
+            // Crear una instancia de la clase de lógica de productos
+            BuyLog objBuy = new BuyLog();
 
-        //    // Invocar al método para eliminar el producto y devolver el resultado
-        //    return objBuy.deleteClient(id);
-        //}
+            // Invocar al método para eliminar el producto y devolver el resultado
+            return objBuy.deleteBuy(id);
+        }
 
-        //protected void Calendar1_SelectionChanged(object sender, EventArgs e)
-        //{
-        //    TBDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
-        //}
+        protected void Calendar1_SelectionChanged(object sender, EventArgs e)
+        {
+            //TBDate.Text = Calendar1.SelectedDate.ToString("yyyy-MM-dd");
+        }
 
         protected void BtnSave_Click(object sender, EventArgs e)
         {
@@ -99,11 +99,11 @@ namespace Presentation
             _fkProduct = Convert.ToInt32(DDLProduct.SelectedValue);
             _invoicenumber = TBInvoiceNumber.Text;
 
-            executed = objBuy.saveBuy(_date, _fkProduct, _quantity, _unitprice, _invoicenumber);
+            bool executed = objBuy.saveBuy(_date, _fkProduct, _quantity, _unitprice, _invoicenumber);
 
             if (executed)
             {
-                LblMsg.Text = "La compra se guardo exitosamente!";
+                LblMsg.Text = "Compra guardada exitosamente";
                 clear();//Se invoca el metodo para limpiar los campos 
             }
             else
@@ -172,7 +172,7 @@ namespace Presentation
             TBQuantity.Text = "";
             TBInvoiceNumber.Text = "";
             TBUnitPrice.Text = "";
-            LblMsg.Text = "";
+            //LblMsg.Text = "";
 
         }
 

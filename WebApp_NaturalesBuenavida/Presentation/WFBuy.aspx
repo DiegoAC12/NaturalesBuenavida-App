@@ -143,13 +143,13 @@
                 loadBuysData(rowData);
             });
 
-            ////Eliminar un producto
-            //$('#buysTable').on('click', '.delete-btn', function () {
-            //    const id = $(this).data('id');// Obtener el ID del cliente
-            //    if (confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
-            //        deleteClient(id);// Invoca a la función para eliminar el producto
-            //    }
-            //});
+            //Eliminar un producto
+            $('#buysTable').on('click', '.delete-btn', function () {
+                const id = $(this).data('id');// Obtener el ID del cliente
+                if (confirm("¿Estás seguro de que deseas eliminar esta compra?")) {
+                    deleteBuy(id);// Invoca a la función para eliminar el producto
+                }
+            });
         });
 
         // Cargar los datos en los TextBox y DDL para actualizar
@@ -160,6 +160,23 @@
             $('#<%= TBQuantity.ClientID %>').val(rowData.CantidadComprada);
             $('#<%= TBUnitPrice.ClientID %>').val(rowData.PrecioUnitario);
             $('#<%= TBInvoiceNumber.ClientID %>').val(rowData.NumeroFactura);
+        }
+
+        // Función para eliminar una compra
+        function deleteBuy(id) {
+            $.ajax({
+                type: "POST",
+                url: "WFBuy.aspx/DeleteBuy",// Se invoca el WebMethod Eliminar un Producto
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ id: id }),
+                success: function (response) {
+                    $('#buysTable').DataTable().ajax.reload();// Recargar la tabla después de eliminar
+                    alert("Compra eliminada exitosamente.");
+                },
+                error: function () {
+                    alert("Error al eliminar la compra.");
+                }
+            });
         }
     </script>
 </asp:Content>
