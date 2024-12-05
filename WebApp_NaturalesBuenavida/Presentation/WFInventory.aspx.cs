@@ -120,7 +120,7 @@ namespace Presentation
 
             if (executed)
             {
-                MessageBox.Show("Inventario se guardo exitosamente!");
+               // MessageBox.Show("Inventario se guardo exitosamente!");
                 LblMsg.Text = "Inventario se guardó exitosamente!";
                 clear();//Se invoca el metodo para limpiar los campos 
             }

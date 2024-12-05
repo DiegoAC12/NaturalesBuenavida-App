@@ -177,7 +177,7 @@ namespace Presentation
             
             if (executed)
             {
-                MessageBox.Show("La compra se guardo exitosamente!");
+                //MessageBox.Show("La compra se guardo exitosamente!");
                 LblMsg.Text = "La compra se guardo exitosamente!";
                 clear();//Se invoca el metodo para limpiar los campos 
             }

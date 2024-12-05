@@ -29,7 +29,7 @@ namespace Presentation
             // Creo una instancia de la clase lógica para acceder a la base de datos.
             UnitMeasureLog unitMeasureLog = new UnitMeasureLog();
             // Llamo al método ShowUnits para obtener los datos de las unidades de medida.
-            var unitData = unitMeasureLog.ShowUnits(); // Retorna un DataSet
+            var unitData = unitMeasureLog.ShowDDLUnitMeasure(); // Retorna un DataSet
 
             List<object> unitList = new List<object>(); // Creo una lista para almacenar las unidades de medida.
 

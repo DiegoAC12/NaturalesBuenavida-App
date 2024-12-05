@@ -18,7 +18,7 @@
                 <a href="WFProduct.aspx">Productos</a>
                 <a href="WFCategories.aspx">Categorias</a>
                 <a href="WFSuppliers.aspx">Proveedores</a>
-                <a href="WFEmployees.aspx">Empleados</a>
+                <a href="WFEmployee.aspx">Empleados</a>
                 <a href="WFClient.aspx">Clientes</a>
                 <a href="WFReturns.aspx">Devoluciones</a>
                 <a href="WFSales.aspx">Ventas</a>
