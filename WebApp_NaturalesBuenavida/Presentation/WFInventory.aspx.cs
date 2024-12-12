@@ -28,6 +28,7 @@ namespace Presentation
         {
             if (!Page.IsPostBack)
             {
+
                 showEmployeeDDL();
                 showProductDDL();
                 TBDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
@@ -41,7 +42,7 @@ namespace Presentation
             
 
             // Se obtiene un DataSet que contiene la lista de clientes desde la base de datos.
-            var dataSet = objInv.ShowInventory();
+            var dataSet = objInv.ShowInventorySummary();
 
             // Se crea una lista para almacenar los productos que se van a devolver.
             var inventorysList = new List<object>();
@@ -54,17 +55,8 @@ namespace Presentation
                     InventoryID = row["Id"],
                     FechaInventario = Convert.ToDateTime(row["FechaInventario"]).ToString("yyyy-MM-dd"),
                     Observacion = row["Observacion"],
-                    CantidadActualInventario = row["Cantidad actual inventario"],
-                    fkproducto = row["fkproducto"],
-                    CodigoProducto = row["CodigoProducto"],
-                    Producto = row["Producto"],
-                    Descripcion = row["Descripcion"],
-                    Medida = row["Medida"],
-                    fkunidadmedida = row["fkunidadmedida"],
-                    UnidadMedida = row["UnidadMedida"],
-                    CantidadNueva = row["Cantidad Nueva"],
-                    fkpersona = row["fkpersona"],
-                    NombreEmpleado = row["NombreEmpleado"],
+                    fkempleado = row["fkempleado"],
+                    NombreResponsable = row["NombreResponsable"],
                 });
             }
 

@@ -33,26 +33,17 @@
         <asp:Label ID="LblMsg" runat="server" Text=""></asp:Label>
     </div>
     <br />
-
+    <hr />
     <%--Lista de Inventarios--%>
     <h2>Lista de Inventarios</h2>
     <table id="inventorysTable" class="display" style="width: 100%">
         <thead>
             <tr>
                 <th>InventoryID</th>
-                <th>FechaInventario</th>
+                <th>Fecha Inventario</th>
                 <th>Observacion</th>
-                <th>CantidadActualInventario</th>
-                <th>fkproducto</th>
-                <th>CodigoProducto</th>
-                <th>Producto</th>
-                <th>Descripcion</th>
-                <th>Medida</th>
-                <th>fkunidadmedida</th>
-                <th>UnidadMedida</th>
-                <th>CantidadNueva</th>
-                <th>fkpersona</th>
-                <th>NombreEmpleado</th>
+                <th>fkempleado</th>
+                <th>Nombre Responsable</th>
             </tr>
         </thead>
         <tbody>
@@ -81,22 +72,13 @@
                     { "data": "InventoryID", "visible": false },
                     { "data": "FechaInventario" },
                     { "data": "Observacion" },
-                    { "data": "CantidadActualInventario" },
-                    { "data": "fkproducto", "visible": false },
-                    { "data": "CodigoProducto"},
-                    { "data": "Producto" },
-                    { "data": "Descripcion"},
-                    { "data": "Medida" },
-                    { "data": "fkunidadmedida", "visible": false },
-                    { "data": "UnidadMedida" },
-                    { "data": "CantidadNueva" },
-                    { "data": "fkpersona", "visible": false },
-                    { "data": "NombreEmpleado" },
+                    { "data": "fkempleado", "visible": false },
+                    { "data": "NombreResponsable" },
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return `<button class="edit-btn" data-id="${row.InventoryID}">Editar</button>
-                        <button class="delete-btn" data-id="${row.InventoryID}">Eliminar</button>`;
+                            return `<button class="view-btn" data-id="${row.InventoryID}">Ver Detalles</button>
+                                    <button class="delete-btn" data-id="${row.InventoryID}">Eliminar</button>`;
                         }
                     }
                 ],
@@ -117,14 +99,22 @@
 
             });
 
-            // Editar un inventario
-            $('#inventorysTable').on('click', '.edit-btn', function () {
-                //const id = $(this).data('id');
+            // Ver un inventario
+            $('#inventorysTable').on('click', '.view-btn', function () {
                 const rowData = $('#inventorysTable').DataTable().row($(this).parents('tr')).data();
-
-                //alert(JSON.stringify(rowData, null, 2));
-                loadInventorysData(rowData);
+                const inventoryId = rowData.InventoryID; // Obtener el ID del inventario
+                //alert(inventoryId);
+                if (inventoryId) {
+                    alert('Será redirigido a ' + inventoryId);
+                    
+                    window.location.href = 'WFInventoryDetails.aspx?inventoryId=' + inventoryId; // Redirigir a la página con el ID
+                } else {
+                    alert('ID de inventario no encontrado.');
+                }
+                
             });
+
+
 
             //Eliminar un inventario
             $('#inventorysTable').on('click', '.delete-btn', function () {
@@ -136,14 +126,14 @@
         });
 
         // Cargar los datos en los TextBox y DDL para actualizar
-        function loadInventorysData(rowData) {
+        <%--function loadInventorysData(rowData) {
             $('#<%= HFInventoryId.ClientID %>').val(rowData.InventoryID);
             $('#<%= TBDate.ClientID %>').val(rowData.FechaInventario);
             $('#<%= DDLProduct.ClientID %>').val(rowData.fkproducto);
             $('#<%= TBQuantityInv.ClientID %>').val(rowData.CantidadNueva);
             $('#<%= TBObservation.ClientID %>').val(rowData.Observacion);
             $('#<%= DDLEmployee.ClientID %>').val(rowData.fkpersona);
-        }
+        }--%>
         // Función para eliminar un inventario
         function deleteInventory(id) {
             $.ajax({
