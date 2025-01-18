@@ -31,7 +31,6 @@ namespace Data
         /// Metodo para guardar una compra de un producto o materia prima nueva
         /// </summary>
         /// <param name="_fecha_compra">Fecha de la compra</param>
-        /// <param name="_total">Total de la compra</param>
         /// <param name="_fkproducto_id">Id del producto a comprar. Foranea</param>
         /// <param name="_numero_factura">Número de factura de compra, dada por el proveedor</param>
         /// <param name="_cantidad">Cantidad del producto comprado</param>
@@ -48,10 +47,9 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
             objSelectCmd.Parameters.Add("p_fecha_compra", MySqlDbType.DateTime).Value = _fecha_compra;
             objSelectCmd.Parameters.Add("p_fkproducto_id", MySqlDbType.Int32).Value = _fkproducto_id;
-            objSelectCmd.Parameters.Add("p_numero_factura", MySqlDbType.VarString).Value = _numero_factura;
             objSelectCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = _cantidad;
             objSelectCmd.Parameters.Add("p_precio_unitario", MySqlDbType.Double).Value = _precio_unitario;
-
+            objSelectCmd.Parameters.Add("p_numero_factura", MySqlDbType.VarString).Value = _numero_factura;
             try
             {
                 row = objSelectCmd.ExecuteNonQuery();
@@ -111,6 +109,34 @@ namespace Data
             objPer.closeConnection();
             return executed;
 
+        }
+
+        public bool deleteBuy(int _idBuy)
+        {
+            bool executed = false;
+            int row;
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "spDeleteCompraYDetalle"; //nombre del procedimiento almacenado
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objSelectCmd.Parameters.Add("p_compra_id", MySqlDbType.Int32).Value = _idBuy;
+
+
+            try
+            {
+                row = objSelectCmd.ExecuteNonQuery();
+                if (row == 1)
+                {
+                    executed = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error " + e.ToString());
+            }
+            objPer.closeConnection();
+            return executed;
         }
     }
 }
