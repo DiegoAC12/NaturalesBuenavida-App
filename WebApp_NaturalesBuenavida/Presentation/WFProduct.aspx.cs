@@ -1,4 +1,4 @@
-﻿using Logic;
+using Logic;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -302,6 +302,12 @@ namespace Presentation
                 clear(); // Limpiar los campos
                 clearGV();
                 
+            
+            if (executed)
+            {
+                //MessageBox.Show("La compra se guardo exitosamente!");
+                LblMsg.Text = "La compra se guardo exitosamente!";
+                clear();//Se invoca el metodo para limpiar los campos 
 
             }
             catch (Exception ex)
