@@ -29,7 +29,7 @@ namespace Presentation
         public static object ListPresentations()
         {
             PresentationLog objPresentationLog = new PresentationLog();
-            var dataSet = objPresentationLog.ShowPresentations();
+            var dataSet = objPresentationLog.ShowPresentationsDDL();
 
             var presentationsList = new List<object>();
             foreach (DataRow row in dataSet.Tables[0].Rows)
