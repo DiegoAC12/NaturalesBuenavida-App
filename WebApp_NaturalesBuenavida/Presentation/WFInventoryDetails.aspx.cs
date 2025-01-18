@@ -17,9 +17,24 @@ namespace Presentation
         {
             if (!IsPostBack)
             {
-                int inventoryId = Convert.ToInt32(Request.QueryString["inventoryId"]);
-                LoadInventoryDetails(inventoryId);
-
+                if (Request.QueryString["inventoryId"] != null)
+                {
+                    int inventoryId;
+                    if (int.TryParse(Request.QueryString["inventoryId"], out inventoryId))
+                    {
+                        LoadInventoryDetails(inventoryId);
+                    }
+                    else
+                    {
+                        // Manejo de error
+                        Response.Write("El parámetro InventoryId no es válido.");
+                    }
+                }
+                else
+                {
+                    // Manejo de error
+                    Response.Write("No se proporcionó el parámetro InventoryId.");
+                }
             }
         }
 
@@ -29,16 +44,35 @@ namespace Presentation
             DataSet inventoryDetails = objInv.ShowInventoryDetails(inventoryId);
 
             // Verificar si hay datos y asignarlos a los controles de la página
-            if (inventoryDetails != null && inventoryDetails.Tables[0].Rows.Count > 0)
+            if (inventoryDetails != null && inventoryDetails.Tables.Count > 0 && inventoryDetails.Tables[0].Rows.Count > 0)
             {
                 DataRow row = inventoryDetails.Tables[0].Rows[0];
-                LblInventoryId.Text = row["id_inventario"].ToString();
+                LblInventoryId.Value = row["id_inventario"].ToString();
                 LblFecha.Text = Convert.ToDateTime(row["fecha"]).ToString("yyyy-MM-dd");
-                //LblProducto.Text = row["nombre_producto"].ToString();
-                //LblCantidad.Text = row["cantidad_nueva"].ToString();
                 LblObservacion.Text = row["observacion"].ToString();
                 LblEmpleado.Text = row["responsable"].ToString();
             }
+
+            // Cargar productos asociados al inventario
+            if (inventoryDetails.Tables.Count > 1 && inventoryDetails.Tables[1].Rows.Count > 0)
+            {
+
+                LblProducto.Text = "Hay productos asociados a este inventario.";
+                RepeaterProducts.DataSource = inventoryDetails.Tables[1];
+                RepeaterProducts.DataBind();
+            }
+            else
+            {
+                // Mostrar un mensaje si no hay productos asociados
+                RepeaterProducts.DataSource = null;
+                RepeaterProducts.DataBind();
+                LblProducto.Text = "No hay productos asociados a este inventario.";
+            }
+        }
+
+        protected void btnRedirigir_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("WFInventory.aspx");
         }
     }
 }

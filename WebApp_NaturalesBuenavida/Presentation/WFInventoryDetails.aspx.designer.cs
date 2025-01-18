@@ -15,22 +15,13 @@ namespace Presentation
     {
 
         /// <summary>
-        /// Control LabelInventoryId.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelInventoryId;
-
-        /// <summary>
         /// Control LblInventoryId.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LblInventoryId;
+        protected global::System.Web.UI.WebControls.HiddenField LblInventoryId;
 
         /// <summary>
         /// Control LabelFecha.
@@ -69,24 +60,6 @@ namespace Presentation
         protected global::System.Web.UI.WebControls.Label LblProducto;
 
         /// <summary>
-        /// Control LabelCantidad.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCantidad;
-
-        /// <summary>
-        /// Control LblCantidad.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LblCantidad;
-
-        /// <summary>
         /// Control LabelObservacion.
         /// </summary>
         /// <remarks>
@@ -121,5 +94,23 @@ namespace Presentation
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label LblEmpleado;
+
+        /// <summary>
+        /// Control RepeaterProducts.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater RepeaterProducts;
+
+        /// <summary>
+        /// Control btnRedirigir.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRedirigir;
     }
 }
