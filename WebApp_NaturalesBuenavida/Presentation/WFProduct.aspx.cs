@@ -12,8 +12,7 @@ using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Windows;
-using Logic.Models;
-using System.Windows.Controls;
+
 
 namespace Presentation
 {
@@ -297,18 +296,19 @@ namespace Presentation
                 }
 
                 // Si todos los productos fueron guardados con éxito
-                MessageBox.Show("Todos los productos fueron guardados exitosamente!");
+                //MessageBox.Show("Todos los productos fueron guardados exitosamente!");
                 LblMsg.Text = "Todos los productos fueron guardados exitosamente!";
                 clear(); // Limpiar los campos
                 clearGV();
-                
-            
-            if (executed)
-            {
-                //MessageBox.Show("La compra se guardo exitosamente!");
-                LblMsg.Text = "La compra se guardo exitosamente!";
-                clear();//Se invoca el metodo para limpiar los campos 
 
+
+                if (executed)
+                {
+                    //MessageBox.Show("La compra se guardo exitosamente!");
+                    LblMsg.Text = "La compra se guardo exitosamente!";
+                    clear();//Se invoca el metodo para limpiar los campos 
+
+                }
             }
             catch (Exception ex)
             {

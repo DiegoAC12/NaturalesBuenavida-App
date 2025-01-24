@@ -69,8 +69,8 @@
                 const inventoryId = rowData.InventoryID;
                 //alert("ID: "+ inventoryId);
                 if (inventoryId) {
-                    alert('Redirigiendo a: ' + inventoryId );
-                    
+                    alert('Redirigiendo a: ' + inventoryId);
+
                     window.location.href = `https://localhost:44352/WFInventoryDetails.aspx?inventoryId=${inventoryId}`;
                     //window.location.href = `WFInventoryDetails.aspx?inventoryId=${inventoryId}`;
                     //document.location.assign(`WFInventoryDetails.aspx?inventoryId=${inventoryId}`);

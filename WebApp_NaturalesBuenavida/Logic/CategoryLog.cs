@@ -36,5 +36,9 @@ namespace Logic
         {
             return objCat.ShowCategoriesDDL();
         }
+        public DataSet ShowCategoriesId(int id)
+        {
+            return objCat.ShowCategoriesId(id);
+        }
     }
 }
