@@ -1,50 +1,42 @@
+using Data;
+using Newtonsoft.Json;
 using System;
 using System.Data;
-using Data;
 
 namespace Logic
 {
     public class InventoryLog
     {
-        InventoryDat objInv = new InventoryDat();
+        private InventoryDat objInv = new InventoryDat();
 
-        // Lógica para mostrar todos los registros de inventario
+        // Método para obtener todos los inventarios
         public DataSet ShowInventory()
         {
             return objInv.ShowInventory();
         }
 
-        public DataSet ShowInventorySummary() { 
-            return objInv.ShowInventorySummary(); 
-        }
-
-        public DataSet ShowInventoryDetails(int inventory)
+        // Método para obtener un resumen de inventarios
+        public DataSet ShowInventorySummary()
         {
-            return objInv.ShowInventoryDetails(inventory);
+            return objInv.ShowInventorySummary();
         }
 
-        // Lógica para insertar un nuevo registro de inventario
-        public bool AddInventory(int cantidad, DateTime fecha, string observacion, int fkProductoId, int fkEmpleadoId)
+        // Método para obtener los detalles de un inventario específico
+        public DataSet ShowInventoryDetails(int inventoryId)
         {
-            return objInv.InsertInventory(cantidad, fecha, observacion, fkProductoId, fkEmpleadoId);
+            return objInv.ShowInventoryDetails(inventoryId);
         }
 
-        // Lógica para actualizar un registro de inventario
-        public bool UpdateInventory(int invId, int cantidad, DateTime fecha, string observacion, int fkProducto, int fkEmpleado)
+        // Método para guardar un inventario con los productos de la lista temporal
+        public bool SaveInventory(DateTime fecha, string observacion, int empleadoId, string productosJson)
         {
-            return objInv.UpdateInventory(invId, cantidad, fecha, observacion, fkProducto, fkEmpleado);
+            return objInv.InsertInventory(fecha, observacion, empleadoId, productosJson);
         }
 
-        // Lógica para eliminar un registro de inventario
+        // Método para eliminar un inventario
         public bool DeleteInventory(int invId)
         {
             return objInv.DeleteInventory(invId);
-        }
-
-        // Lógica para mostrar el inventario en formato DDL
-        public DataSet ShowInventoryDDL()
-        {
-            return objInv.ShowInventoryDDL();
         }
     }
 }

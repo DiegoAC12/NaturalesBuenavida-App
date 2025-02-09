@@ -1,4 +1,5 @@
 using Logic;
+using Model;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -8,11 +9,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Services;
-using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Windows;
-
 
 namespace Presentation
 {
@@ -21,11 +19,11 @@ namespace Presentation
 
         //private static List<TemporaryProduct> TemporaryProductList = new List<TemporaryProduct>();
 
-        ProductLog objPro = new ProductLog();
-        UnitMeasureLog objUnit = new UnitMeasureLog();
-        PresentationLog objPres = new PresentationLog();
-        CategoryLog objCategory = new CategoryLog();
-        SupplierLog objSupplier = new SupplierLog();
+        private static ProductLog objProd = new ProductLog();
+        private static UnitMeasureLog objUnit = new UnitMeasureLog();
+        private static PresentationLog objPres = new PresentationLog();
+        private static CategoryLog objCategory = new CategoryLog();
+        private static SupplierLog objSupplier = new SupplierLog();
 
         private int _id, _cantidadInventario, _medida, _fkcategoria, _fkproveedor, _fkunidadmedida, _fkpresentacion;
         private string _codigoProducto, _nombreProducto, _descripcionProducto, _numeroLote;
@@ -35,13 +33,18 @@ namespace Presentation
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
-            {                
+            {
                 //showProduct();
                 showCategoryDDL();
                 showSupplierDDL();
                 showUnitMeasureDDL();
                 showPresentationDDL();
                 TBDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            }
+            Usuario usuario = Session["Usuario"] as Usuario;
+            if (usuario == null || usuario.Privilegios != null && !usuario.Privilegios.Contains(((int)Privilegios.Productos).ToString()))
+            {
+                Response.Redirect("AccessDenied.aspx");
             }
         }
 
@@ -83,7 +86,7 @@ namespace Presentation
                     NumeroLote = TBNumberLote.Text, // Número de lote
                                                     // Fecha de vencimiento, si existe en el formulario (puedes agregar un campo en el formulario para esto)
                     FechaVencimiento = DateTime.Parse(TBDate.Text), // Suponiendo que tienes un campo para la fecha de vencimiento
-                                                                              // Asignar información del proveedor, si la tienes en el formulario
+                                                                    // Asignar información del proveedor, si la tienes en el formulario
                     NombreProveedor = DDLSupplier.SelectedItem.Text, // Asumiendo que tienes el nombre del proveedor en el DDL
                     UnidadMedida = DDLUnitMeasure.SelectedItem.Text,
                     Presentacion = DDLPresentation.SelectedItem.Text,
@@ -104,6 +107,7 @@ namespace Presentation
             catch (Exception ex)
             {
                 LblMsg.Text = "Error al agregar el producto: " + ex.Message;
+                LblMsg.CssClass = "text-danger fw-bold my-3";
             }
         }
 
@@ -116,7 +120,7 @@ namespace Presentation
 
         private void clearGV()
         {
-            
+
             GVProduct.DataSource = null;
             GVProduct.DataBind();
 
@@ -125,10 +129,8 @@ namespace Presentation
         [WebMethod]
         public static object ListProducts()
         {
-            ProductLog objPro = new ProductLog();
-
             // Se obtiene un DataSet que contiene la lista de clientes desde la base de datos.
-            var dataSet = objPro.showProducts();
+            var dataSet = objProd.showProducts();
 
             // Se crea una lista para almacenar los productos que se van a devolver.
             var productsList = new List<object>();
@@ -138,14 +140,14 @@ namespace Presentation
             {
                 productsList.Add(new
                 {
-                    ProductID = row["ProductID"],
+                    ProductID = row["prod_id"],
                     Codigo = row["Codigo"],
                     Nombre = row["Nombre"],
                     Descripcion = row["Descripcion"],
                     Medida = row["Medida"],
                     fkunidadmedida = row["fkunidadmedida"],
                     UnidadMedida = row["UnidadMedida"],
-                    fkpresentacion = row["fkpresentacion"],                  
+                    fkpresentacion = row["fkpresentacion"],
                     Presentacion = row["Presentacion"],
                     fkcategory = row["fkcategory"],
                     Categoria = row["Categoria"],
@@ -155,8 +157,7 @@ namespace Presentation
                     PrecioVenta = row["PrecioVenta"],
                     PrecioCompra = row["PrecioCompra"],
                     fkproveedor = row["fkproveedor"],
-                    NombreProveedor = row["NombreProveedor"],
-                    ApellidoProveedor = row["ApellidoProveedor"]
+                    Proveedor = row["NombreProveedor"]+" "+ row["ApellidoProveedor"]
                 });
             }
 
@@ -165,13 +166,32 @@ namespace Presentation
         }
 
         [WebMethod]
-        public static bool DeleteProduct(int id)
+        public static AjaxResponse DeleteProduct(int id)
         {
-            // Crear una instancia de la clase de lógica de productos
-            ProductLog objProd = new ProductLog();
+            AjaxResponse response = new AjaxResponse();
+            try
+            {
+                // Creo un objeto de respuesta para devolver al cliente.
+                bool executed = objProd.deleteProduct(id);
 
-            // Invocar al método para eliminar el producto y devolver el resultado
-            return objProd.deleteProduct(id);
+                if (executed) // Verifico si la eliminación fue exitosa
+                {
+                    response.Success = true;
+                    response.Message = "Producto eliminado correctamente.";
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Error al eliminar el producto.";
+                }
+            }
+            catch (Exception ex)// En caso de error, configuro la respuesta con el mensaje de error.
+            {
+                response.Success = false;
+                response.Message = "Ocurrió un error: " + ex.Message;
+            }
+
+            return response;
         }
 
         protected void btnAddRow_Click(object sender, EventArgs e)
@@ -239,6 +259,7 @@ namespace Presentation
             catch (Exception ex)
             {
                 LblMsg.Text = "Error al eliminar el producto: " + ex.Message;
+                LblMsg.CssClass = "text-danger fw-bold my-3";
             }
         }
 
@@ -250,6 +271,7 @@ namespace Presentation
                 if (TempProductList.Count == 0)
                 {
                     LblMsg.Text = "No hay productos en la lista temporal para guardar.";
+                    LblMsg.CssClass = "text-danger fw-bold my-3";
                     return; // Detener si la lista está vacía
                 }
 
@@ -260,6 +282,7 @@ namespace Presentation
                     if (product.FechaVencimiento == default(DateTime))
                     {
                         LblMsg.Text = "Formato de fecha inválido para el producto " + product.Codigo;
+                        LblMsg.CssClass = "text-danger fw-bold my-3";
                         return; // Detener la ejecución si alguna fecha no es válida
                     }
 
@@ -283,7 +306,7 @@ namespace Presentation
                     //int _fkpresentacion = Convert.ToInt32(DDLPresentation.SelectedValue);
 
                     // Llamar al método para guardar el producto
-                    bool executed = objPro.saveProducts(_codigoProducto, _nombreProducto, _descripcionProducto,
+                    bool executed = objProd.saveProducts(_codigoProducto, _nombreProducto, _descripcionProducto,
                         _cantidadInventario, _numeroLote, _date, _precioVenta, _precioCompra, _medida,
                         _fkcategoria, _fkproveedor, _fkunidadmedida, _fkpresentacion);
 
@@ -291,6 +314,7 @@ namespace Presentation
                     if (!executed)
                     {
                         LblMsg.Text = "Error al guardar el producto ";
+                        LblMsg.CssClass = "text-danger fw-bold my-3";
                         return; // Detener si algún producto no se guardó
                     }
                 }
@@ -298,6 +322,7 @@ namespace Presentation
                 // Si todos los productos fueron guardados con éxito
                 //MessageBox.Show("Todos los productos fueron guardados exitosamente!");
                 LblMsg.Text = "Todos los productos fueron guardados exitosamente!";
+                LblMsg.CssClass = "text-success fw-bold my-3";
                 clear(); // Limpiar los campos
                 clearGV();
 
@@ -306,6 +331,7 @@ namespace Presentation
                 {
                     //MessageBox.Show("La compra se guardo exitosamente!");
                     LblMsg.Text = "La compra se guardo exitosamente!";
+                    LblMsg.CssClass = "text-success fw-bold my-3";
                     clear();//Se invoca el metodo para limpiar los campos 
 
                 }
@@ -314,6 +340,7 @@ namespace Presentation
             {
                 // Manejar cualquier excepción
                 LblMsg.Text = "Error: " + ex.Message;
+                LblMsg.CssClass = "text-danger fw-bold my-3";
             }
         }
         private void clear()
@@ -341,6 +368,7 @@ namespace Presentation
             if (string.IsNullOrEmpty(HFProductID.Value))
             {
                 LblMsg.Text = "No se ha seleccionado producto para actualizar.";
+                LblMsg.CssClass = "text-danger fw-bold my-3";
                 return;
             }
 
@@ -361,19 +389,21 @@ namespace Presentation
             _fkunidadmedida = Convert.ToInt32(DDLUnitMeasure.SelectedValue);
             _fkpresentacion = Convert.ToInt32(DDLPresentation.SelectedValue);
 
-            executed = objPro.updateProducts(_id,_codigoProducto, _nombreProducto, _descripcionProducto,
+            executed = objProd.updateProducts(_id, _codigoProducto, _nombreProducto, _descripcionProducto,
                 _cantidadInventario, _numeroLote, _date, _precioVenta, _precioCompra, _medida,
                 _fkcategoria, _fkproveedor, _fkunidadmedida, _fkpresentacion);
 
             if (executed)
             {
                 LblMsg.Text = "La compra se actualizo exitosamente!";
+                LblMsg.CssClass = "text-success fw-bold my-3";
                 clear();//Se invoca el metodo para limpiar los campos 
-                
+
             }
             else
             {
                 LblMsg.Text = "Error al actualizar";
+                LblMsg.CssClass = "text-danger fw-bold my-3";
             }
         }
 

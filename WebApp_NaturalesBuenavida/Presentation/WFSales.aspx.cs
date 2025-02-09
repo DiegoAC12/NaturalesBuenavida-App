@@ -1,15 +1,17 @@
 ﻿using Logic;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Security.Cryptography;
 using System.Web.Services;
 
 namespace Presentation
 {
     public partial class WFSales : System.Web.UI.Page
     {
-        SalesLog objSales = new SalesLog();
+        private static SalesLog objSales = new SalesLog();
         private bool executed = false;
 
         protected void Page_Load(object sender, EventArgs e)
@@ -19,29 +21,38 @@ namespace Presentation
                 LoadDropdowns();
                 TBDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
             }
+            Usuario usuario = Session["Usuario"] as Usuario;
+            if (usuario == null || usuario.Privilegios != null && !usuario.Privilegios.Contains(((int)Privilegios.Ventas).ToString()))
+            {
+                Response.Redirect("AccessDenied.aspx");
+            }
         }
 
         [WebMethod]
         public static object ListSales()
         {
-            SalesLog salesLog = new SalesLog();
-            DataSet salesData = salesLog.ShowSales();
+            DataSet salesData = objSales.ShowSales();
 
             List<object> salesList = new List<object>();
             foreach (DataRow row in salesData.Tables[0].Rows)
             {
                 salesList.Add(new
                 {
-                    VentaID = row["Referencia"],
-                    FechaVenta = Convert.ToDateTime(row["fecha"]).ToString("yyyy-MM-dd"),
-                    TotalVenta = row["total"],
-                    Descripción = row["descripcion"],
-                    NombreEmpleado = row["nombre_empleado"],
-                    ApellidoEmpleado = row["apellido_empleado"],
-                    IdentificacionCliente = row["identificacion_cliente"],
-                    NombreCliente = row["nombre_cliente"],
-                    ApellidoCliente = row["apellido_cliente"]
-
+                    ID = row["ID"],
+                    Fecha = Convert.ToDateTime(row["Fecha"]).ToString("yyyy-MM-dd"),
+                    NumeroFactura = row["NumeroFactura"],
+                    IdProducto = row["IdProducto"],
+                    Producto = row["Producto"],
+                    PrecioUnidad = row["PrecioUnidad"],
+                    CantidadVendida = row["CantidadVendida"],
+                    Total = row["Total"],
+                    cliente_id = row["cliente_id"],
+                    IdentificacionCliente = row["IdentificacionCliente"],
+                    NombreCliente = row["NombreCliente"],
+                    empleado_id = row["empleado_id"],
+                    IdentificacionEmpleado = row["IdentificacionEmpleado"],
+                    NombreEmpleado = row["NombreEmpleado"],
+                    Descripcion = row["Descripcion"],
                 });
             }
 
@@ -57,24 +68,28 @@ namespace Presentation
         protected void BtnSave_Click(object sender, EventArgs e)
         {
             if (!DateTime.TryParse(TBDate.Text, out DateTime parsedDate))
-            { 
+            {
                 LblMsg.Text = "Formato de fecha invalido";
                 return;
             }
             DateTime _date = DateTime.Parse(TBDate.Text);
-            double total = Convert.ToDouble(TBTotal.Text);
-            string description = TBDescription.Text;
             int clientId = Convert.ToInt32(DDLClient.SelectedValue);
             int employeeId = Convert.ToInt32(DDLEmployee.SelectedValue);
+            int productId = Convert.ToInt32(DDLProduct.SelectedValue);
+            int cantidad = Convert.ToInt32(TBQuantity.Text);
+            string description = TBDescription.Text;
 
-           executed = objSales.SaveSale(_date, total, description, clientId, employeeId);
-            if(executed)
+            executed = objSales.SaveSale(description, clientId, employeeId, productId, cantidad);
+            if (executed)
             {
                 LblMsg.Text = "La Venta se guardó exiitosamente";
+                LblMsg.CssClass = "text-success fw-bold";
+                ClearFields();
             }
             else
             {
                 LblMsg.Text = "venta no guardada.";
+                LblMsg.CssClass = "text-danger fw-bold";
             }
         }
 
@@ -82,18 +97,22 @@ namespace Presentation
         {
             if (int.TryParse(HFSaleID.Value, out int saleId) && DateTime.TryParse(TBDate.Text, out DateTime saleDate))
             {
-                decimal total = decimal.Parse(TBTotal.Text);
+                DateTime _date = DateTime.Parse(TBDate.Text);
+                int clientId = Convert.ToInt32(DDLClient.SelectedValue);
+                int employeeId = Convert.ToInt32(DDLEmployee.SelectedValue);
+                int productId = Convert.ToInt32(DDLProduct.SelectedValue);
+                int cantidad = Convert.ToInt32(TBQuantity.Text);
                 string description = TBDescription.Text;
-                int clientId = int.Parse(DDLClient.SelectedValue);
-                int employeeId = int.Parse(DDLEmployee.SelectedValue);
 
-                bool success = objSales.UpdateSale(saleId, saleDate, total, description, clientId, employeeId);
+                bool success = objSales.UpdateSale(saleId, description, clientId, employeeId, productId, cantidad);
 
                 LblMsg.Text = success ? "Venta actualizada exitosamente" : "Error al actualizar la venta";
+                LblMsg.CssClass = success ? "text-success fw-bold" : "text-danger fw-bold";
             }
             else
             {
                 LblMsg.Text = "Por favor, seleccione una venta válida.";
+                LblMsg.CssClass = "text-danger fw-bold";
             }
         }
 
@@ -122,29 +141,59 @@ namespace Presentation
             DDLEmployee.DataTextField = "NombreCompleto"; // Se define el nombre del campo
             DDLEmployee.DataBind();
             DDLEmployee.Items.Insert(0, "---- Seleccione un empleado ----");
+
+            ProductLog productLog = new ProductLog();
+            DataSet products = productLog.showProductsDDL();
+            
+            // Configura el DataSource del DropDownList
+            DDLProduct.DataSource = products.Tables[0];
+            DDLProduct.DataValueField = "Id";  // Se define el nombre del campo
+            DDLProduct.DataTextField = "Producto"; // Se define el nombre del campo
+            DDLProduct.DataBind();
+            DDLProduct.Items.Insert(0, "---- Seleccione un producto ----");
+
         }
+
         [WebMethod]
-        public static object DeleteSale(int saleId)
+        public static AjaxResponse DeleteSale(int saleId)
         {
-            SalesLog salesLog = new SalesLog();
-            bool success = salesLog.DeleteSale(saleId);  // Llama al método de la capa de lógica
-            return new
+            AjaxResponse response = new AjaxResponse();
+            try
             {
+                // Creo un objeto de respuesta para devolver al cliente.
+                bool executed = objSales.DeleteSale(saleId);
 
-                success = success
+                if (executed) // Verifico si la eliminación fue exitosa
+                {
+                    response.Success = true;
+                    response.Message = "Venta eliminada correctamente.";
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Error al eliminar la venta.";
+                }
+            }
+            catch (Exception ex)// En caso de error, configuro la respuesta con el mensaje de error.
+            {
+                response.Success = false;
+                response.Message = "Ocurrió un error: " + ex.Message;
+            }
 
-            };
+            return response;
         }
 
         private void ClearFields()
         {
             HFSaleID.Value = string.Empty;
-            TBDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            TBTotal.Text = string.Empty;
-            TBDescription.Text = string.Empty;
+            //TBDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            //TBQuantity.Text = string.Empty;
+            //TBDescription.Text = string.Empty;
             DDLClient.SelectedIndex = 0;
             DDLEmployee.SelectedIndex = 0;
-            LblMsg.Text = string.Empty;
+            DDLProduct.SelectedIndex = 0;
+            TBQuantity.Text = "";
+            TBDescription.Text = "";
         }
     }
 }

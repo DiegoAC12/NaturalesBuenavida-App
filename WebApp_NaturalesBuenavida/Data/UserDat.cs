@@ -1,9 +1,8 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Model;
+using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
 
 namespace Data
 {
@@ -27,7 +26,7 @@ namespace Data
             return objData;
         }
         //Metodo para guardar un nuevo Usuario
-        public bool saveUser(string _user_Name, string _user_Password,string _user_State, DateTime _user_DateCreation, int _user_fkempId, int _user_fkrolId)
+        public bool saveUser(string _user_Name, string _user_Password, string _user_State, DateTime _user_DateCreation, int _user_fkempId, int _user_fkrolId)
         {
             bool executed = false;
             int row;
@@ -60,7 +59,7 @@ namespace Data
 
         }
         //Metodo para actualizar un Usuario
-        public bool updateUser(int _user_Id,string _user_Name, string _user_Password, string _user_State, DateTime _user_DateCreation, int _user_fkempId, int _user_fkrolId)
+        public bool updateUser(int _user_Id, string _user_Name, string _user_Password, string _user_State, DateTime _user_DateCreation, int _user_fkempId, int _user_fkrolId)
         {
             bool executed = false;
             int row;
@@ -120,6 +119,44 @@ namespace Data
             objPer.closeConnection();
             return executed;
 
+        }
+
+        /// <summary>
+        /// Verifica si un usuario se encuentra registrado y tiene acceso a la aplicacion usando un login y password
+        /// </summary>
+        /// <param name="username">Usuario</param>
+        /// <param name="password">Contrasena</param>
+        /// <returns>Retorna los datos del usuario registrado si es existoso en caso contrario retorna nulo</returns>
+        public Usuario LoginUser(string username, string password)
+        {
+            MySqlDataAdapter objAdapter = new MySqlDataAdapter();
+            DataSet objData = new DataSet();
+
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "sp_login_user";
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
+            objSelectCmd.Parameters.Add("p_username", MySqlDbType.String).Value = username;
+            objSelectCmd.Parameters.Add("p_password", MySqlDbType.String).Value = password;
+            objAdapter.SelectCommand = objSelectCmd;
+            MySqlDataReader reader = objSelectCmd.ExecuteReader();
+            if (reader.Read())
+            {
+                Usuario usuario = new Usuario();
+                usuario.Usu_Id = int.Parse(reader["usu_id"].ToString());
+                usuario.Rol_Id = int.Parse(reader["tbl_rol_rol_id"].ToString());
+                usuario.Login = reader["usuario"].ToString();
+                usuario.Correo = reader["correo"].ToString();
+                usuario.Nombres = reader["nombres"].ToString();
+                usuario.Apellidos = reader["apellidos"].ToString();
+                usuario.Rol = reader["rol_nombre"].ToString();
+                usuario.Privilegios = reader["privilegios"].ToString().Split(',').ToList();
+                return usuario;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
