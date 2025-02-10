@@ -59,34 +59,31 @@ namespace Data
         }
 
         // Método para insertar un nuevo registro de inventario
-        public bool InsertInventory(DateTime fecha, string observacion, int empleadoId, string productosJson)
+        public bool InsertInventory(int cantidad, DateTime fecha, string observacion, int fkProductoId, int fkEmpleadoId)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objInsertCmd = new MySqlCommand();
             objInsertCmd.Connection = objPer.openConnection();
-            objInsertCmd.CommandText = "spInsertInventario"; // Procedimiento almacenado
+            objInsertCmd.CommandText = "spInsertInventario"; // Procedimiento almacenado para insertar inventario
             objInsertCmd.CommandType = CommandType.StoredProcedure;
-
-            objInsertCmd.Parameters.Add("p_fecha", MySqlDbType.Date).Value = fecha;
-            objInsertCmd.Parameters.Add("p_observacion", MySqlDbType.Text).Value = observacion;
-            objInsertCmd.Parameters.Add("p_id_empleado", MySqlDbType.Int32).Value = empleadoId;
-            objInsertCmd.Parameters.Add("p_productos", MySqlDbType.JSON).Value = productosJson;
+            objInsertCmd.Parameters.Add("p_inv_cantidad", MySqlDbType.Int32).Value = cantidad;
+            objInsertCmd.Parameters.Add("p_inv_fecha", MySqlDbType.Date).Value = fecha;
+            objInsertCmd.Parameters.Add("p_inv_observacion", MySqlDbType.Text).Value = observacion;
+            objInsertCmd.Parameters.Add("p_prod_id", MySqlDbType.Int32).Value = fkProductoId;
+            objInsertCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = fkEmpleadoId;
 
             try
             {
                 row = objInsertCmd.ExecuteNonQuery();
-                executed = row > 0;
+                executed = row == 1;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: " + e.ToString());
             }
-            finally
-            {
-                objPer.closeConnection();
-            }
+            objPer.closeConnection();
             return executed;
         }
 

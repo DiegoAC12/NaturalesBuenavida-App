@@ -13,55 +13,36 @@
         <div class="mt-3 text-center">
             <asp:Label ID="LblMsg" runat="server" Text="" CssClass=""></asp:Label>
         </div>
+        <div class="mb-3">
+            <asp:Label ID="LabelDate" runat="server" CssClass="form-label fw-bold" Text="Fecha de la venta"></asp:Label>
+            <asp:TextBox ID="TBDate" runat="server" TextMode="Date" CssClass="form-control"></asp:TextBox>
+        </div>
+        <div class="mb-3">
+            <asp:Label ID="LabelEmployee" runat="server" CssClass="form-label fw-bold" Text="Empleado"></asp:Label>
+            <asp:DropDownList ID="DDLEmployee" CssClass="form-select" runat="server"></asp:DropDownList>
+        </div>
+        <div class="mb-3">
+            <asp:Label ID="LabelClient" runat="server" CssClass="form-label fw-bold" Text="Cliente"></asp:Label>
+            <asp:DropDownList ID="DDLClient" CssClass="form-select" runat="server"></asp:DropDownList>
+        </div>
+        <div class="mb-3">
+            <asp:Label ID="LabelDescription" runat="server" CssClass="form-label fw-bold" Text="Descripción"></asp:Label>
+            <asp:TextBox ID="TBDescription" runat="server" TextMode="MultiLine" Rows="5" Columns="40" CssClass="form-control"></asp:TextBox>
+        </div>
+        <div class="mb-3">
 
-        <!-- Fila para la fecha de venta -->
-        <div class="mb-3 row">
-            <div class="col-md-6">
-                <asp:Label ID="LabelDate" runat="server" CssClass="form-label fw-bold" Text="Fecha de la venta"></asp:Label>
-                <asp:TextBox ID="TBDate" runat="server" TextMode="Date" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-
-            </div>
+            <asp:Label ID="LabelTotal" runat="server" CssClass="form-label fw-bold" Text="Total de la venta"></asp:Label>
+            <asp:TextBox ID="TBTotal" runat="server" CssClass="form-control"></asp:TextBox>
         </div>
 
-        <!-- Fila para el empleado y cliente -->
-        <div class="mb-3 row">
-            <div class="col-md-6">
-                <asp:Label ID="LabelEmployee" runat="server" CssClass="form-label fw-bold" Text="Empleado"></asp:Label>
-                <asp:DropDownList ID="DDLEmployee" CssClass="form-select" runat="server"></asp:DropDownList>
-            </div>
-            <div class="col-md-6">
-                <asp:Label ID="LabelClient" runat="server" CssClass="form-label fw-bold" Text="Cliente"></asp:Label>
-                <asp:DropDownList ID="DDLClient" CssClass="form-select" runat="server"></asp:DropDownList>
-                <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/WFClient.aspx">¿Agregar Cliente?</asp:HyperLink>
-            </div>
-        </div>
-
-        <!-- Fila para el producto y cantidad -->
-        <div class="mb-3 row">
-            <div class="col-md-6">
-                <asp:Label ID="LabelProducto" runat="server" CssClass="form-label fw-bold" Text="Producto"></asp:Label>
-                <asp:DropDownList ID="DDLProduct" CssClass="form-select" runat="server"></asp:DropDownList>
-            </div>
-            <div class="col-md-6">
-                <asp:Label ID="LabelCantidad" runat="server" CssClass="form-label fw-bold" Text="Cantidad Vendida"></asp:Label>
-                <asp:TextBox ID="TBQuantity" runat="server" CssClass="form-control"></asp:TextBox>
-            </div>
-        </div>
-        <!-- Fila para la descripción -->
-        <div class="mb-3 row">
-            <div class="col-md-12">
-                <asp:Label ID="LabelDescription" runat="server" CssClass="form-label fw-bold" Text="Descripción"></asp:Label>
-                <asp:TextBox ID="TBDescription" runat="server" TextMode="MultiLine" Rows="3" Columns="30" CssClass="form-control"></asp:TextBox>
-            </div>
-        </div>
         <!-- Botones Guardar, Actualizar, Limpiar -->
+
         <div class="d-flex flex-column flex-md-row gap-2 mt-3">
-            <asp:Button ID="BtnSave" runat="server" Text="Realizar Venta" CssClass="btn" OnClick="BtnSave_Click" />
-            <%--<asp:Button ID="BtnUpdate" runat="server" Text="Actualizar" CssClass="btn" OnClick="BtnUpdate_Click" />--%>
+            <asp:Button ID="BtnSave" runat="server" Text="Guardar" CssClass="btn" OnClick="BtnSave_Click" />
+            <asp:Button ID="BtnUpdate" runat="server" Text="Actualizar" CssClass="btn" OnClick="BtnUpdate_Click" />
             <asp:Button ID="BtnClear" runat="server" Text="Limpiar" CssClass="btn" OnClick="BtnClear_Click" />
         </div>
     </div>
-
 
 
     <div class="container table-responsive mt-4 bg-white border rounded">
@@ -70,19 +51,11 @@
                 <tr>
                     <th>ID</th>
                     <th>Fecha</th>
-                    <th>Numero Factura</th>
-                    <th>IdProducto</th>
-                    <th>Producto</th>
-                    <th>Precio Unidad</th>
-                    <th>Cantidad Vendida</th>
                     <th>Total</th>
-                    <th>cliente_id</th>
-                    <th>Identificacion Cliente</th>
-                    <th>Nombre Cliente</th>
-                    <th>empleado_id</th>
-                    <th>Identificacion Empleado</th>
-                    <th>Nombre Empleado</th>
                     <th>Descripción</th>
+                    <th>Empleado</th>
+                    <th>Identificacion cliente</th>
+                    <th>Cliente</th>
                 </tr>
             </thead>
             <tbody>
@@ -109,26 +82,18 @@
                     }
                 },
                 "columns": [
-                    { "data": "ID", "visible": false },
-                    { "data": "Fecha" },
-                    { "data": "NumeroFactura" },
-                    { "data": "IdProducto", "visible": false },
-                    { "data": "Producto" },
-                    { "data": "PrecioUnidad" },
-                    { "data": "CantidadVendida" },
-                    { "data": "Total" },
-                    { "data": "cliente_id", "visible": false },
+                    { "data": "VentaID", "visible": false },
+                    { "data": "FechaVenta" },
+                    { "data": "TotalVenta" },
+                    { "data": "Descripción" },
+                    { "data": "Empleado" },
                     { "data": "IdentificacionCliente" },
-                    { "data": "NombreCliente" },
-                    { "data": "empleado_id", "visible": false },
-                    { "data": "IdentificacionEmpleado" },
-                    { "data": "NombreEmpleado" },
-                    { "data": "Descripcion" },
+                    { "data": "Cliente" },
                     {
                         "data": null,
                         "render": function (data, type, row) {
-                            return `<button class="edit-btn"  type="button" data-id="${row.ID}">Editar</button>
-                                    <button class="delete-btn"  type="button" data-id="${row.ID}">Eliminar</button>`;
+                            return `<button class="edit-btn"  type="button" data-id="${row.VentaID}">Editar</button>
+                                    <button class="delete-btn"  type="button" data-id="${row.VentaID}">Eliminar</button>`;
                         }
                     }
                 ],
@@ -180,13 +145,12 @@
         });
 
         function loadSalesData(rowData) {
-            $('#<%= HFSaleID.ClientID %>').val(rowData.ID);
-            $('#<%= TBDate.ClientID %>').val(rowData.Fecha);
-            $('#<%= TBQuantity.ClientID %>').val(rowData.Cantidad);
+            $('#<%= HFSaleID.ClientID %>').val(rowData.VentaID);
+            $('#<%= TBDate.ClientID %>').val(rowData.FechaVenta);
+            $('#<%= TBTotal.ClientID %>').val(rowData.TotalVenta);
             $('#<%= TBDescription.ClientID %>').val(rowData.Descripción);
-            $('#<%= DDLClient.ClientID %>').val(rowData.cliente_id);
-            $('#<%= DDLEmployee.ClientID %>').val(rowData.empleado_id);
-            $('#<%= DDLProduct.ClientID %>').val(rowData.IdProducto);
+            $('#<%= DDLClient.ClientID %>').val(rowData.ClienteId);
+            $('#<%= DDLEmployee.ClientID %>').val(rowData.EmpleadoId);
         }
     </script>
 </asp:Content>

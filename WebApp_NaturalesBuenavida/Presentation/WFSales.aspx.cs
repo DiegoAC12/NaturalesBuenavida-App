@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Security.Cryptography;
 using System.Web.Services;
 
 namespace Presentation
@@ -38,21 +37,15 @@ namespace Presentation
             {
                 salesList.Add(new
                 {
-                    ID = row["ID"],
-                    Fecha = Convert.ToDateTime(row["Fecha"]).ToString("yyyy-MM-dd"),
-                    NumeroFactura = row["NumeroFactura"],
-                    IdProducto = row["IdProducto"],
-                    Producto = row["Producto"],
-                    PrecioUnidad = row["PrecioUnidad"],
-                    CantidadVendida = row["CantidadVendida"],
-                    Total = row["Total"],
-                    cliente_id = row["cliente_id"],
-                    IdentificacionCliente = row["IdentificacionCliente"],
-                    NombreCliente = row["NombreCliente"],
-                    empleado_id = row["empleado_id"],
-                    IdentificacionEmpleado = row["IdentificacionEmpleado"],
-                    NombreEmpleado = row["NombreEmpleado"],
-                    Descripcion = row["Descripcion"],
+                    VentaID = row["Referencia"],
+                    FechaVenta = Convert.ToDateTime(row["fecha"]).ToString("yyyy-MM-dd"),
+                    TotalVenta = row["total"],
+                    Descripción = row["descripcion"],
+                    Empleado = row["nombre_empleado"] + " " + row["apellido_empleado"],
+                    IdentificacionCliente = row["identificacion_cliente"],
+                    Cliente = row["nombre_cliente"] + " " + row["apellido_cliente"],
+                    EmpleadoId = row["emp_id"],
+                    ClienteId = row["cli_id"],
                 });
             }
 
@@ -73,18 +66,16 @@ namespace Presentation
                 return;
             }
             DateTime _date = DateTime.Parse(TBDate.Text);
+            double total = Convert.ToDouble(TBTotal.Text);
+            string description = TBDescription.Text;
             int clientId = Convert.ToInt32(DDLClient.SelectedValue);
             int employeeId = Convert.ToInt32(DDLEmployee.SelectedValue);
-            int productId = Convert.ToInt32(DDLProduct.SelectedValue);
-            int cantidad = Convert.ToInt32(TBQuantity.Text);
-            string description = TBDescription.Text;
 
-            executed = objSales.SaveSale(description, clientId, employeeId, productId, cantidad);
+            executed = objSales.SaveSale(_date, total, description, clientId, employeeId);
             if (executed)
             {
                 LblMsg.Text = "La Venta se guardó exiitosamente";
                 LblMsg.CssClass = "text-success fw-bold";
-                ClearFields();
             }
             else
             {
@@ -97,14 +88,12 @@ namespace Presentation
         {
             if (int.TryParse(HFSaleID.Value, out int saleId) && DateTime.TryParse(TBDate.Text, out DateTime saleDate))
             {
-                DateTime _date = DateTime.Parse(TBDate.Text);
-                int clientId = Convert.ToInt32(DDLClient.SelectedValue);
-                int employeeId = Convert.ToInt32(DDLEmployee.SelectedValue);
-                int productId = Convert.ToInt32(DDLProduct.SelectedValue);
-                int cantidad = Convert.ToInt32(TBQuantity.Text);
+                decimal total = decimal.Parse(TBTotal.Text);
                 string description = TBDescription.Text;
+                int clientId = int.Parse(DDLClient.SelectedValue);
+                int employeeId = int.Parse(DDLEmployee.SelectedValue);
 
-                bool success = objSales.UpdateSale(saleId, description, clientId, employeeId, productId, cantidad);
+                bool success = objSales.UpdateSale(saleId, saleDate, total, description, clientId, employeeId);
 
                 LblMsg.Text = success ? "Venta actualizada exitosamente" : "Error al actualizar la venta";
                 LblMsg.CssClass = success ? "text-success fw-bold" : "text-danger fw-bold";
@@ -141,17 +130,6 @@ namespace Presentation
             DDLEmployee.DataTextField = "NombreCompleto"; // Se define el nombre del campo
             DDLEmployee.DataBind();
             DDLEmployee.Items.Insert(0, "---- Seleccione un empleado ----");
-
-            ProductLog productLog = new ProductLog();
-            DataSet products = productLog.showProductsDDL();
-            
-            // Configura el DataSource del DropDownList
-            DDLProduct.DataSource = products.Tables[0];
-            DDLProduct.DataValueField = "Id";  // Se define el nombre del campo
-            DDLProduct.DataTextField = "Producto"; // Se define el nombre del campo
-            DDLProduct.DataBind();
-            DDLProduct.Items.Insert(0, "---- Seleccione un producto ----");
-
         }
 
         [WebMethod]
@@ -186,14 +164,11 @@ namespace Presentation
         private void ClearFields()
         {
             HFSaleID.Value = string.Empty;
-            //TBDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            //TBQuantity.Text = string.Empty;
-            //TBDescription.Text = string.Empty;
+            TBDate.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            TBTotal.Text = string.Empty;
+            TBDescription.Text = string.Empty;
             DDLClient.SelectedIndex = 0;
             DDLEmployee.SelectedIndex = 0;
-            DDLProduct.SelectedIndex = 0;
-            TBQuantity.Text = "";
-            TBDescription.Text = "";
         }
     }
 }

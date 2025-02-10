@@ -168,41 +168,6 @@ namespace Data
             return objData;
         }
 
-        public int GetProductIdByName(string nombreProducto)
-        {
-            int productId = 0;
-
-            MySqlCommand objSelectCmd = new MySqlCommand();
-            objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "spGetProductIdByName"; // Nombre del procedimiento almacenado
-            objSelectCmd.CommandType = CommandType.StoredProcedure;
-
-            // Parámetro de entrada
-            objSelectCmd.Parameters.Add("p_nombreProducto", MySqlDbType.VarChar, 255).Value = nombreProducto;
-
-            // Parámetro de salida
-            MySqlParameter outputParam = new MySqlParameter("p_productoId", MySqlDbType.Int32);
-            outputParam.Direction = ParameterDirection.Output;
-            objSelectCmd.Parameters.Add(outputParam);
-
-            try
-            {
-                objSelectCmd.ExecuteNonQuery();
-                if (outputParam.Value != DBNull.Value)
-                {
-                    productId = Convert.ToInt32(outputParam.Value);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e.ToString());
-            }
-
-            objPer.closeConnection();
-            return productId;
-        }
-
-
         public bool deleteProduct(int _prodId)
         {
             bool executed = false;

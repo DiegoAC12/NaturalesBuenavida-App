@@ -24,20 +24,15 @@ namespace Logic
 
 
         // Método para guardar una nueva venta
-        public bool SaveSale(string descripcion, int clienteId, int empleadoId, int productoId, int cantidad)
+        public bool SaveSale(DateTime fecha, double total, string descripcion, int clienteId, int empleadoId)
         {
-            return objSales.SaveSale(descripcion, clienteId, empleadoId, productoId, cantidad);
+            return objSales.SaveSale(fecha, total, descripcion, clienteId, empleadoId);
         }
 
-        //public bool SaveSale(DateTime fecha, double total, string descripcion, int clienteId, int empleadoId)
-        //{
-        //    return objSales.SaveSale(fecha, total, descripcion, clienteId, empleadoId);
-        //}
-
         // Método para actualizar una venta
-        public bool UpdateSale(int ventaId, string descripcion, int clienteId, int empleadoId, int productoId, int cantidad)
+        public bool UpdateSale(int ventId, DateTime fecha, decimal total, string descripcion, int clienteId, int empleadoId)
         {
-            return objSales.UpdateSale(ventaId, descripcion, clienteId, empleadoId, productoId, cantidad);
+            return objSales.UpdateSale(ventId, fecha, total, descripcion, clienteId, empleadoId);
         }
 
         // Método para eliminar una venta

@@ -18,10 +18,7 @@ namespace Presentation
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            // Muestra la imagen de cargando antes de procesar la encriptación
-            ScriptManager.RegisterStartupScript(this, GetType(), "showLoading", "showLoading();", true);
             Usuario usuario = objUser.LoginUser(txtUsername.Text, txtPassword.Text);
-            
 
             if (usuario != null && usuario.Rol_Id > 0)
             {
@@ -46,7 +43,7 @@ namespace Presentation
             }
             else
             {
-                lblMessage.Text = "Usuario o Contraseña inválida.";
+                lblMessage.Text = "Usuario o contraseña inválida.";
             }
             
         }

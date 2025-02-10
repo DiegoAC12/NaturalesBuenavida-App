@@ -19,7 +19,7 @@ namespace Data
             MySqlCommand objSelectCmd = new MySqlCommand();
 
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "spSelectVentas"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandText = "sp_mostrar_ventas"; // nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             objAdapter.SelectCommand = objSelectCmd;
@@ -47,113 +47,71 @@ namespace Data
         }
 
         // Método para guardar una nueva venta
-
-        public bool SaveSale(string descripcion, int clienteId, int empleadoId, int productoId, int cantidad)
+        public bool SaveSale(DateTime fecha, double total, string descripcion, int clienteId, int empleadoId)
         {
             bool executed = false;
             int row;
 
             MySqlCommand objSelectCmd = new MySqlCommand();
             objSelectCmd.Connection = objPer.openConnection();
-            objSelectCmd.CommandText = "spInsertVenta"; // Nombre actualizado del procedimiento almacenado
+            objSelectCmd.CommandText = "sp_insertar_venta"; // nombre del procedimiento almacenado
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
-            // Se agregan los parámetros necesarios para la venta
-            objSelectCmd.Parameters.Add("p_cliente_id", MySqlDbType.Int32).Value = clienteId;
-            objSelectCmd.Parameters.Add("p_empleado_id", MySqlDbType.Int32).Value = empleadoId;
-            objSelectCmd.Parameters.Add("p_descripcion", MySqlDbType.Text).Value = descripcion;
-            objSelectCmd.Parameters.Add("p_producto_id", MySqlDbType.Int32).Value = productoId;
-            objSelectCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = cantidad;
+            // Se agregan parámetros al comando para pasar los valores de la venta.
+            objSelectCmd.Parameters.Add("p_vent_fecha", MySqlDbType.Date).Value = fecha;
+            objSelectCmd.Parameters.Add("p_vent_total", MySqlDbType.Double).Value = total;
+            objSelectCmd.Parameters.Add("p_vent_descripcion", MySqlDbType.Text).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_cli_id", MySqlDbType.Int32).Value = clienteId;
+            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = empleadoId;
 
             try
             {
                 row = objSelectCmd.ExecuteNonQuery();
-                if (row > 0) // Cambié de `== 1` a `> 0` por seguridad en caso de múltiples filas afectadas
+                if (row == 1)
                 {
                     executed = true;
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception e)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                Console.WriteLine("Error " + e.ToString());
             }
-            finally
-            {
-                objPer.closeConnection();
-            }
-
+            objPer.closeConnection();
             return executed;
         }
 
-        //public bool SaveSale(DateTime fecha, double total, string descripcion, int clienteId, int empleadoId)
-        //{
-        //    bool executed = false;
-        //    int row;
-
-        //    MySqlCommand objSelectCmd = new MySqlCommand();
-        //    objSelectCmd.Connection = objPer.openConnection();
-        //    objSelectCmd.CommandText = "sp_insertar_venta"; // nombre del procedimiento almacenado
-        //    objSelectCmd.CommandType = CommandType.StoredProcedure;
-
-        //    // Se agregan parámetros al comando para pasar los valores de la venta.
-        //    objSelectCmd.Parameters.Add("p_vent_fecha", MySqlDbType.Date).Value = fecha;
-        //    objSelectCmd.Parameters.Add("p_vent_total", MySqlDbType.Double).Value = total;
-        //    objSelectCmd.Parameters.Add("p_vent_descripcion", MySqlDbType.Text).Value = descripcion;
-        //    objSelectCmd.Parameters.Add("p_cli_id", MySqlDbType.Int32).Value = clienteId;
-        //    objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = empleadoId;
-
-        //    try
-        //    {
-        //        row = objSelectCmd.ExecuteNonQuery();
-        //        if (row == 1)
-        //        {
-        //            executed = true;
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine("Error " + e.ToString());
-        //    }
-        //    objPer.closeConnection();
-        //    return executed;
-        //}
-
         // Método para actualizar una venta
-        public bool UpdateSale(int ventaId, string descripcion, int clienteId, int empleadoId, int productoId, int cantidad)
+        public bool UpdateSale(int ventId, DateTime fecha, decimal total, string descripcion, int clienteId, int empleadoId)
         {
             bool executed = false;
             int row;
 
-            MySqlCommand objUpdateCmd = new MySqlCommand();
-            objUpdateCmd.Connection = objPer.openConnection();
-            objUpdateCmd.CommandText = "sp_actualizar_venta"; // Procedimiento almacenado de actualización
-            objUpdateCmd.CommandType = CommandType.StoredProcedure;
+            MySqlCommand objSelectCmd = new MySqlCommand();
+            objSelectCmd.Connection = objPer.openConnection();
+            objSelectCmd.CommandText = "sp_actualizar_venta"; // nombre del procedimiento almacenado
+            objSelectCmd.CommandType = CommandType.StoredProcedure;
 
-            // Se agregan los parámetros necesarios para actualizar la venta
-            objUpdateCmd.Parameters.Add("p_venta_id", MySqlDbType.Int32).Value = ventaId;
-            objUpdateCmd.Parameters.Add("p_cliente_id", MySqlDbType.Int32).Value = clienteId;
-            objUpdateCmd.Parameters.Add("p_empleado_id", MySqlDbType.Int32).Value = empleadoId;
-            objUpdateCmd.Parameters.Add("p_descripcion", MySqlDbType.Text).Value = descripcion;
-            objUpdateCmd.Parameters.Add("p_producto_id", MySqlDbType.Int32).Value = productoId;
-            objUpdateCmd.Parameters.Add("p_cantidad", MySqlDbType.Int32).Value = cantidad;
+            // Se agregan parámetros al comando para pasar los valores de la venta.
+            objSelectCmd.Parameters.Add("p_vent_id", MySqlDbType.Int32).Value = ventId;
+            objSelectCmd.Parameters.Add("p_vent_fecha", MySqlDbType.Date).Value = fecha;
+            objSelectCmd.Parameters.Add("p_vent_total", MySqlDbType.Decimal).Value = total;
+            objSelectCmd.Parameters.Add("p_vent_descripcion", MySqlDbType.Text).Value = descripcion;
+            objSelectCmd.Parameters.Add("p_cli_id", MySqlDbType.Int32).Value = clienteId;
+            objSelectCmd.Parameters.Add("p_emp_id", MySqlDbType.Int32).Value = empleadoId;
 
             try
             {
-                row = objUpdateCmd.ExecuteNonQuery();
-                if (row > 0)
+                row = objSelectCmd.ExecuteNonQuery();
+                if (row == 1)
                 {
                     executed = true;
                 }
             }
-            catch (MySqlException ex)
+            catch (Exception e)
             {
-                Console.WriteLine("Error: " + ex.Message);
+                Console.WriteLine("Error " + e.ToString());
             }
-            finally
-            {
-                objPer.closeConnection();
-            }
-
+            objPer.closeConnection();
             return executed;
         }
 
@@ -169,7 +127,7 @@ namespace Data
             objSelectCmd.CommandType = CommandType.StoredProcedure;
 
             // Se agrega parámetro al comando para pasar el ID de la venta.
-            objSelectCmd.Parameters.Add("p_venta_id", MySqlDbType.Int32).Value = ventId;
+            objSelectCmd.Parameters.Add("p_vent_id", MySqlDbType.Int32).Value = ventId;
 
             try
             {

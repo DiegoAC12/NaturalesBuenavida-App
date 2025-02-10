@@ -9,68 +9,6 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <h2 class="text-center main-title">Lista de Inventarios</h2>
     <div class="container table-responsive mt-4 bg-white border rounded">
-
-        <asp:HiddenField ID="HFInventoryID" runat="server" />
-        <div class="mt-3 text-center">
-            <asp:Label ID="LblMsg" runat="server" Text="" CssClass=""></asp:Label>
-        </div>
-
-        <!-- Fila para la fecha de inventario -->
-        <div class="mb-3 row">
-            <div class="col-md-6">
-                <asp:Label ID="LabelDate" runat="server" CssClass="form-label fw-bold" Text="Fecha realización Inventario"></asp:Label>
-                <asp:TextBox ID="TBDate" runat="server" TextMode="Date" CssClass="form-control"></asp:TextBox>
-            </div>
-            <div class="col-md-6">
-                <asp:Label ID="LabelEmployee" runat="server" CssClass="form-label fw-bold" Text="Empleado que realiza el inventario"></asp:Label>
-                <asp:DropDownList ID="DDLEmployee" CssClass="form-select" runat="server"></asp:DropDownList>
-            </div>
-        </div>
-
-        <!-- Fila para la observación -->
-        <div class="mb-3 row">
-            <div class="col-md-12">
-                <asp:Label ID="LabelObservacion" runat="server" CssClass="form-label fw-bold" Text="Observaciones"></asp:Label>
-                <asp:TextBox ID="TBObservacion" runat="server" TextMode="MultiLine" Rows="3" Columns="30" CssClass="form-control"></asp:TextBox>
-            </div>
-        </div>
-
-        <hr />
-
-        <div class="mb-3 row">
-            <div class="col-md-6">
-                <asp:Label ID="LabelProducto" runat="server" CssClass="form-label fw-bold" Text="Producto"></asp:Label>
-                <asp:DropDownList ID="DDLProduct" CssClass="form-select" runat="server"></asp:DropDownList>
-            </div>
-            <div class="col-md-6">
-                <asp:Label ID="LabelQuantity" runat="server" CssClass="form-label fw-bold" Text="Cantidad nueva"></asp:Label>
-                <asp:TextBox ID="TBQuantity" runat="server" CssClass="form-control"></asp:TextBox>
-            </div>
-        </div>
-        <div class="mb-3 row">
-            <div class="col-md-6">
-                <asp:Button ID="btnAddRow" runat="server" Text="Añadir a la fila" CssClass="add-btn" OnClick="btnAddRow_Click" />
-            </div>
-        </div>
-        <hr />
-
-        <div>
-            <asp:GridView ID="GVProduct" runat="server" AutoGenerateColumns="False" OnRowDeleting="GVProduct_RowDeleting" CssClass="table table-striped">
-                <Columns>
-                    <asp:BoundField DataField="IdProducto" HeaderText="IdProducto" HeaderStyle-CssClass="table-header" />
-                    <asp:BoundField DataField="Nombre" HeaderText="Producto" HeaderStyle-CssClass="table-header" />
-                    <asp:BoundField DataField="Cantidad" HeaderText="Cantidad" HeaderStyle-CssClass="table-header" />
-                    <asp:CommandField ShowDeleteButton="true" HeaderText="Acciones" HeaderStyle-CssClass="table-header" ControlStyle-CssClass="delete-btn" ButtonType="Button" />
-                </Columns>
-            </asp:GridView>
-        </div>
-        <hr />
-
-        <div class="d-flex flex-column flex-md-row gap-2 mt-3">
-            <asp:Button ID="BtnSave" runat="server" Text="Guardar Inventario" CssClass="btn" OnClick="BtnSave_Click" />
-            <asp:Button ID="BtbClear" runat="server" Text="Limpiar" CssClass="btn" OnClick="BtbClear_Click" /><br />
-        </div>
-
         <table id="inventorysTable" class="table display" style="width: 100%">
             <thead>
                 <tr>
